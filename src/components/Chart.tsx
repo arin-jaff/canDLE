@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { createChart, LineSeries, type IChartApi, type ISeriesApi, type Time, ColorType, LineStyle } from 'lightweight-charts';
+import { createChart, LineSeries, type IChartApi, type Time, ColorType, LineStyle } from 'lightweight-charts';
 
 interface ChartProps {
   data: number[][];
@@ -10,16 +10,13 @@ interface ChartProps {
 export function Chart({ data, showPriceAxis, basePrice }: ChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
-  const seriesRef = useRef<ISeriesApi<"Line"> | null>(null);
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    if (chartRef.current) {
-      chartRef.current.remove();
-    }
+    const container = containerRef.current;
 
-    const chart = createChart(containerRef.current, {
+    const chart = createChart(container, {
       layout: {
         background: { type: ColorType.Solid, color: '#0a0a0a' },
         textColor: '#666666',
@@ -70,19 +67,19 @@ export function Chart({ data, showPriceAxis, basePrice }: ChartProps) {
     chart.timeScale().fitContent();
 
     chartRef.current = chart;
-    seriesRef.current = series;
 
     const handleResize = () => {
-      if (containerRef.current) {
-        chart.applyOptions({ width: containerRef.current.clientWidth });
+      if (container) {
+        chart.applyOptions({ width: container.clientWidth });
       }
     };
 
     const resizeObserver = new ResizeObserver(handleResize);
-    resizeObserver.observe(containerRef.current);
+    resizeObserver.observe(container);
 
     return () => {
       resizeObserver.disconnect();
+      chartRef.current = null;
       chart.remove();
     };
   }, [data, showPriceAxis, basePrice]);
