@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { PuzzleData } from '../lib/types';
 
 function getTodayPuzzleIndex(): number {
@@ -19,9 +19,10 @@ export function usePuzzle() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const idx = getTodayPuzzleIndex();
-    fetch(`/puzzles/sample-${idx}.json`)
+  const loadPuzzle = useCallback((index: number) => {
+    setLoading(true);
+    setError(null);
+    fetch(`/puzzles/sample-${index}.json`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to load puzzle');
         return res.json();
@@ -36,5 +37,29 @@ export function usePuzzle() {
       });
   }, []);
 
-  return { puzzle, loading, error };
+  const loadPuzzleByTicker = useCallback((ticker: string) => {
+    setLoading(true);
+    setError(null);
+    fetch(`/puzzles/${ticker.toLowerCase()}.json`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`No puzzle found for ${ticker}`);
+        return res.json();
+      })
+      .then((data: PuzzleData) => {
+        setPuzzle(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  // Load today's puzzle on mount
+  useEffect(() => {
+    const idx = getTodayPuzzleIndex();
+    loadPuzzle(idx);
+  }, [loadPuzzle]);
+
+  return { puzzle, loading, error, loadPuzzle, loadPuzzleByTicker };
 }

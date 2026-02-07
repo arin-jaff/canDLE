@@ -1,9 +1,15 @@
 #!/usr/bin/env python3
-"""Fetch real stock data and generate puzzle JSONs for canDLE."""
+"""Fetch real stock data and generate puzzle JSONs for canDLE.
+
+Usage:
+  python3 scripts/generate_puzzles.py              # Generate all 3 sample puzzles
+  python3 scripts/generate_puzzles.py MSFT          # Generate a single ticker puzzle
+  python3 scripts/generate_puzzles.py MSFT AMZN GOOG  # Generate multiple tickers
+"""
 
 import json
 import os
-from datetime import datetime, timedelta
+import sys
 import yfinance as yf
 
 PUZZLES = [
@@ -51,12 +57,23 @@ PUZZLES = [
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "public", "puzzles")
 
 
-def fetch_chart_data(ticker: str, period: str) -> list:
-    """Fetch historical data and return as [[unix_timestamp, pct_change], ...]."""
+def classify_market_cap(cap: float) -> str:
+    if cap >= 200e9:
+        return "Mega Cap (>$200B)"
+    elif cap >= 10e9:
+        return "Large Cap ($10B-$200B)"
+    elif cap >= 2e9:
+        return "Mid Cap ($2B-$10B)"
+    else:
+        return "Small Cap (<$2B)"
+
+
+def fetch_chart_data(ticker: str, period: str):
+    """Fetch historical data and return as [[unix_timestamp, pct_change], ...] + base_price."""
     stock = yf.Ticker(ticker)
     hist = stock.history(period=period)
     if hist.empty:
-        return []
+        return [], 0
 
     base_price = float(hist["Close"].iloc[0])
     result = []
@@ -107,13 +124,81 @@ def generate_puzzle(puzzle_def: dict) -> dict:
     }
 
 
+def generate_from_ticker(ticker: str) -> dict:
+    """Auto-generate a puzzle for any ticker by pulling metadata from yfinance."""
+    ticker = ticker.upper()
+    print(f"Auto-generating puzzle for {ticker}...")
+
+    stock = yf.Ticker(ticker)
+    info = stock.info
+
+    name = info.get("longName") or info.get("shortName") or ticker
+    sector = info.get("sector", "Unknown")
+    industry = info.get("industry", "Unknown")
+    country = info.get("country", "Unknown")
+    market_cap = info.get("marketCap", 0)
+    market_cap_range = classify_market_cap(market_cap)
+
+    # Build description, strip company name from it
+    description = info.get("longBusinessSummary", "")
+    if description:
+        # Truncate to ~1 sentence and strip the company name
+        sentences = description.split(". ")
+        description = sentences[0] + "."
+        description = description.replace(name, "The company")
+        description = description.replace(ticker, "[TICKER]")
+
+    ipo_year = None
+    try:
+        first_trade = info.get("firstTradeDateEpochUtc")
+        if first_trade:
+            from datetime import datetime
+            ipo_year = datetime.utcfromtimestamp(first_trade).year
+    except Exception:
+        pass
+
+    puzzle_def = {
+        "id": ticker.lower(),
+        "ticker": ticker,
+        "name": name,
+        "hints": {
+            "sector": sector,
+            "industry": industry,
+            "marketCapRange": market_cap_range,
+            "hqCountry": country,
+            "description": description or f"A publicly traded company in the {sector} sector.",
+            "ipoYear": ipo_year or 2000,
+        },
+    }
+
+    return generate_puzzle(puzzle_def)
+
+
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
+    # If tickers passed as CLI args, generate those
+    if len(sys.argv) > 1:
+        tickers = sys.argv[1:]
+        for ticker in tickers:
+            try:
+                puzzle = generate_from_ticker(ticker)
+                for key, data in puzzle["charts"].items():
+                    print(f"  {key}: {len(data)} data points")
+
+                path = os.path.join(OUTPUT_DIR, f"{ticker.lower()}.json")
+                with open(path, "w") as f:
+                    json.dump(puzzle, f, indent=2)
+                print(f"  Wrote {path}")
+            except Exception as e:
+                print(f"  ERROR generating {ticker}: {e}")
+        print("\nDone!")
+        return
+
+    # Default: generate sample puzzles
     for puzzle_def in PUZZLES:
         puzzle = generate_puzzle(puzzle_def)
 
-        # Print chart sizes for verification
         for key, data in puzzle["charts"].items():
             print(f"  {key}: {len(data)} data points")
 

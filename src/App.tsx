@@ -2,6 +2,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { usePuzzle, getPuzzleNumber } from './hooks/usePuzzle';
 import { useGameStore } from './hooks/useGameState';
 import { Intro } from './components/Intro';
+import { MatrixRain } from './components/MatrixRain';
+import { AdminPanel } from './components/AdminPanel';
 import { Header } from './components/Header';
 import { Chart } from './components/Chart';
 import { ChartTabs } from './components/ChartTabs';
@@ -15,11 +17,13 @@ import { StatsModal } from './components/StatsModal';
 import { HowToPlayModal } from './components/HowToPlayModal';
 
 function App() {
-  const { puzzle, loading, error } = usePuzzle();
-  const { state, stats, init, buyHint, submitGuess } = useGameStore();
+  const { puzzle, loading, error, loadPuzzle, loadPuzzleByTicker } = usePuzzle();
+  const { state, stats, init, reset, buyHint, submitGuess } = useGameStore();
   const [showStats, setShowStats] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [showMatrixRain, setShowMatrixRain] = useState(false);
   const handleIntroComplete = useCallback(() => setShowIntro(false), []);
 
   useEffect(() => {
@@ -27,6 +31,21 @@ function App() {
       init(puzzle.id);
     }
   }, [puzzle, init]);
+
+  // Backtick key toggles admin panel
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === '`' && !e.ctrlKey && !e.metaKey) {
+        // Don't toggle if typing in an input
+        const tag = (e.target as HTMLElement).tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+        e.preventDefault();
+        setShowAdmin((v) => !v);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, []);
 
   if (loading) {
     return (
@@ -42,7 +61,7 @@ function App() {
     return (
       <div className="h-screen flex items-center justify-center bg-terminal-black">
         <div className="text-terminal-red text-sm font-mono">
-          ERR: FAILED TO LOAD PUZZLE DATA
+          ERR: {error || 'FAILED TO LOAD PUZZLE DATA'}
         </div>
       </div>
     );
@@ -58,14 +77,46 @@ function App() {
   };
 
   const handleGuess = (ticker: string) => {
-    submitGuess(ticker, puzzle.answer.ticker);
+    const result = submitGuess(ticker, puzzle.answer.ticker);
+    if (result === 'correct') {
+      setShowMatrixRain(true);
+    }
+  };
+
+  const handleReset = () => {
+    if (puzzle) {
+      reset(puzzle.id);
+      setShowAdmin(false);
+    }
+  };
+
+  const handleAdminLoadPuzzle = (index: number) => {
+    loadPuzzle(index);
+    setShowAdmin(false);
+  };
+
+  const handleAdminLoadTicker = (ticker: string) => {
+    loadPuzzleByTicker(ticker);
+    setShowAdmin(false);
   };
 
   return (
     <div className="h-screen bg-terminal-black flex flex-col overflow-hidden">
       {showIntro && <Intro onComplete={handleIntroComplete} />}
 
-      <Header onShowStats={() => setShowStats(true)} onShowHelp={() => setShowHelp(true)} />
+      {showMatrixRain && (
+        <MatrixRain
+          onComplete={() => setShowMatrixRain(false)}
+          ticker={puzzle.answer.ticker}
+          score={state.bankroll}
+        />
+      )}
+
+      <Header
+        onShowStats={() => setShowStats(true)}
+        onShowHelp={() => setShowHelp(true)}
+        onShowAdmin={() => setShowAdmin(true)}
+      />
 
       <main className="flex-1 w-full overflow-y-auto">
         <div className="flex flex-col lg:flex-row h-full">
@@ -159,6 +210,15 @@ function App() {
       )}
       {showHelp && (
         <HowToPlayModal onClose={() => setShowHelp(false)} />
+      )}
+      {showAdmin && (
+        <AdminPanel
+          currentPuzzleId={puzzle.id}
+          onLoadPuzzle={handleAdminLoadPuzzle}
+          onLoadTicker={handleAdminLoadTicker}
+          onReset={handleReset}
+          onClose={() => setShowAdmin(false)}
+        />
       )}
     </div>
   );

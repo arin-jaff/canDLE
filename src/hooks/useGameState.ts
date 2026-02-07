@@ -46,6 +46,7 @@ interface GameStore {
   state: GameState;
   stats: Stats;
   init: (puzzleId: string) => void;
+  reset: (puzzleId: string) => void;
   buyHint: (hintId: string) => boolean;
   submitGuess: (ticker: string, correctTicker: string) => 'correct' | 'wrong' | 'lost';
   setActiveChart: (chart: '1y' | '1m' | '5y' | '10y') => void;
@@ -80,6 +81,23 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({ state: fresh });
       saveDailyState(fresh);
     }
+  },
+
+  reset: (puzzleId: string) => {
+    try {
+      localStorage.removeItem(getTodayKey());
+    } catch { /* ignore */ }
+    const fresh: GameState = {
+      puzzleId,
+      bankroll: STARTING_BANKROLL,
+      revealedHints: [],
+      guesses: [],
+      won: false,
+      lost: false,
+      activeChart: '1y',
+    };
+    set({ state: fresh });
+    saveDailyState(fresh);
   },
 
   buyHint: (hintId: string) => {
