@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --color-terminal-black: #000000;
+  --color-terminal-dark: #0a0a0a;
+  --color-terminal-panel: #111111;
+  --color-terminal-border: #1a1a1a;
+  --color-terminal-green: #00FF41;
+  --color-terminal-green-dim: #00cc33;
+  --color-terminal-green-dark: #003b0f;
+  --color-terminal-red: #ff3538;
+  --color-terminal-text: #e0e0e0;
+  --color-terminal-muted: #666666;
+  --color-terminal-yellow: #ffcc00;
+  --font-mono: "JetBrains Mono", "Fira Code", "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  background-color: #000000;
+  color: #e0e0e0;
+  font-family: "JetBrains Mono", "Fira Code", "IBM Plex Mono", ui-monospace, monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background-color: #00FF41;
+  color: #000000;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+  border: 1px solid #003b0f;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+.hint-reveal {
+  animation: flicker 0.15s ease-in-out 3;
+}
