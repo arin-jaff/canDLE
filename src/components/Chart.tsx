@@ -7,12 +7,25 @@ interface ChartProps {
   basePrice: number;
 }
 
+// Remap real timestamps to anonymized sequential business days
+// starting from a fixed fake epoch so dates look plausible but reveal nothing.
+function anonymizeTimestamps(data: number[][]): number[][] {
+  const FAKE_EPOCH = 946684800; // 2000-01-01 00:00:00 UTC
+  const DAY = 86400;
+  return data.map(([, y], i) => {
+    // Skip weekends in fake dates for realistic spacing
+    let fakeDays = i;
+    const weekends = Math.floor(fakeDays / 5) * 2;
+    return [FAKE_EPOCH + (fakeDays + weekends) * DAY, y];
+  });
+}
+
 export function Chart({ data, showPriceAxis, basePrice }: ChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || data.length === 0) return;
 
     const container = containerRef.current;
 
@@ -37,11 +50,16 @@ export function Chart({ data, showPriceAxis, basePrice }: ChartProps) {
       },
       timeScale: {
         borderColor: '#1a1a1a',
-        timeVisible: false,
-        secondsVisible: false,
+        visible: true,
+        tickMarkFormatter: (_time: unknown, _tickMarkType: unknown, _locale: unknown) => {
+          return '';
+        },
       },
       handleScroll: false,
       handleScale: false,
+      localization: {
+        timeFormatter: () => '',
+      },
     });
 
     const isPositive = data.length > 1 && data[data.length - 1][1] >= data[0][1];
@@ -58,7 +76,8 @@ export function Chart({ data, showPriceAxis, basePrice }: ChartProps) {
         : { type: 'custom', formatter: (price: number) => `${price >= 0 ? '+' : ''}${price.toFixed(1)}%` },
     });
 
-    const chartData = data.map(([x, y]) => ({
+    const anonymized = anonymizeTimestamps(data);
+    const chartData = anonymized.map(([x, y]) => ({
       time: x as unknown as Time,
       value: showPriceAxis ? basePrice * (1 + y / 100) : y,
     }));
