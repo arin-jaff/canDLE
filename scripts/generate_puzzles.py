@@ -150,10 +150,15 @@ def generate_from_ticker(ticker: str) -> dict:
 
     ipo_year = None
     try:
+        from datetime import datetime, timezone
+        # Try epoch seconds first, then milliseconds
         first_trade = info.get("firstTradeDateEpochUtc")
         if first_trade:
-            from datetime import datetime
-            ipo_year = datetime.utcfromtimestamp(first_trade).year
+            ipo_year = datetime.fromtimestamp(first_trade, tz=timezone.utc).year
+        else:
+            first_trade_ms = info.get("firstTradeDateMilliseconds")
+            if first_trade_ms:
+                ipo_year = datetime.fromtimestamp(first_trade_ms / 1000, tz=timezone.utc).year
     except Exception:
         pass
 

@@ -17,7 +17,7 @@ import { StatsModal } from './components/StatsModal';
 import { HowToPlayModal } from './components/HowToPlayModal';
 
 function App() {
-  const { puzzle, loading, error, loadPuzzle, loadPuzzleByTicker } = usePuzzle();
+  const { puzzle, loading, error, loadPuzzleByTicker } = usePuzzle();
   const { state, stats, init, reset, buyHint, submitGuess } = useGameStore();
   const [showStats, setShowStats] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
@@ -88,11 +88,6 @@ function App() {
       reset(puzzle.id);
       setShowAdmin(false);
     }
-  };
-
-  const handleAdminLoadPuzzle = (index: number) => {
-    loadPuzzle(index);
-    setShowAdmin(false);
   };
 
   const handleAdminLoadTicker = (ticker: string) => {
@@ -214,7 +209,6 @@ function App() {
       {showAdmin && (
         <AdminPanel
           currentPuzzleId={puzzle.id}
-          onLoadPuzzle={handleAdminLoadPuzzle}
           onLoadTicker={handleAdminLoadTicker}
           onReset={handleReset}
           onClose={() => setShowAdmin(false)}

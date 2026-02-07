@@ -1,10 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { PuzzleData } from '../lib/types';
 
-function getTodayPuzzleIndex(): number {
-  const today = new Date();
-  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-  return seed % 3;
+function getTodayDate(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 export function getPuzzleNumber(): number {
@@ -18,24 +17,6 @@ export function usePuzzle() {
   const [puzzle, setPuzzle] = useState<PuzzleData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const loadPuzzle = useCallback((index: number) => {
-    setLoading(true);
-    setError(null);
-    fetch(`/puzzles/sample-${index}.json`)
-      .then((res) => {
-        if (!res.ok) throw new Error('Failed to load puzzle');
-        return res.json();
-      })
-      .then((data: PuzzleData) => {
-        setPuzzle(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
 
   const loadPuzzleByTicker = useCallback((ticker: string) => {
     setLoading(true);
@@ -55,11 +36,36 @@ export function usePuzzle() {
       });
   }, []);
 
-  // Load today's puzzle on mount
+  // Load today's puzzle from schedule on mount
   useEffect(() => {
-    const idx = getTodayPuzzleIndex();
-    loadPuzzle(idx);
-  }, [loadPuzzle]);
+    const today = getTodayDate();
 
-  return { puzzle, loading, error, loadPuzzle, loadPuzzleByTicker };
+    fetch('/schedule.json')
+      .then((res) => {
+        if (!res.ok) throw new Error('No schedule');
+        return res.json();
+      })
+      .then((schedule: Record<string, string>) => {
+        const ticker = schedule[today];
+        if (ticker) {
+          return fetch(`/puzzles/${ticker.toLowerCase()}.json`);
+        }
+        // Fallback: load sample-0
+        return fetch('/puzzles/sample-0.json');
+      })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to load puzzle');
+        return res.json();
+      })
+      .then((data: PuzzleData) => {
+        setPuzzle(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  return { puzzle, loading, error, loadPuzzleByTicker };
 }
