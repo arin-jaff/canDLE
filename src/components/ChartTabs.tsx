@@ -13,7 +13,7 @@ export function ChartTabs() {
   const { state, setActiveChart } = useGameStore();
   const { activeChart, revealedHints } = state;
 
-  const isUnlocked = (key: Timeframe) => key === '1y' || revealedHints.includes(key);
+  const isUnlocked = (key: Timeframe) => key === '1m' || revealedHints.includes(key);
 
   return (
     <div className="flex gap-0 border border-terminal-border border-t-0">

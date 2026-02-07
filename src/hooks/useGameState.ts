@@ -60,7 +60,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     guesses: [],
     won: false,
     lost: false,
-    activeChart: '1y',
+    activeChart: '1m',
   },
   stats: loadStats(),
 
@@ -76,7 +76,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
         guesses: [],
         won: false,
         lost: false,
-        activeChart: '1y',
+        activeChart: '1m',
       };
       set({ state: fresh });
       saveDailyState(fresh);
@@ -94,7 +94,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       guesses: [],
       won: false,
       lost: false,
-      activeChart: '1y',
+      activeChart: '1m',
     };
     set({ state: fresh });
     saveDailyState(fresh);
@@ -186,8 +186,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
   setActiveChart: (chart) => {
     const { state } = get();
-    const chartHints = ['1m', '5y', '10y'];
-    if (chart !== '1y' && !state.revealedHints.includes(chart) && chartHints.includes(chart)) {
+    const chartHints = ['1y', '5y', '10y'];
+    if (chart !== '1m' && !state.revealedHints.includes(chart) && chartHints.includes(chart)) {
       return;
     }
     const newState = { ...state, activeChart: chart };
