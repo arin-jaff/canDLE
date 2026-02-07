@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { execSync } from 'child_process'
@@ -7,6 +7,10 @@ import { join } from 'path'
 import type { Plugin } from 'vite'
 
 const PYTHON = '/Library/Frameworks/Python.framework/Versions/3.12/bin/python3'
+
+// Load .env for admin API usage
+const env = loadEnv('development', process.cwd(), '')
+const GEMINI_API_KEY = env.GEMINI_API_KEY || ''
 
 function adminApiPlugin(): Plugin {
   return {
@@ -34,7 +38,12 @@ function adminApiPlugin(): Plugin {
           try {
             const result = execSync(
               `${PYTHON} scripts/generate_puzzles.py ${ticker.replace(/[^a-zA-Z0-9.]/g, '')}`,
-              { cwd: process.cwd(), timeout: 30000, encoding: 'utf-8' }
+              {
+                cwd: process.cwd(),
+                timeout: 45000,
+                encoding: 'utf-8',
+                env: { ...process.env, GEMINI_API_KEY },
+              }
             )
             res.writeHead(200, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify({ ok: true, ticker, output: result }))
