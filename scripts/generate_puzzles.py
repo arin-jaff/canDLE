@@ -95,37 +95,44 @@ OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "public", "puzzles")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 
 
-def generate_description_gemini(ticker: str, name: str, sector: str, industry: str) -> str | None:
+def generate_description_gemini(
+    ticker: str, name: str, sector: str, industry: str,
+    country: str = "", ipo_year: int | None = None,
+) -> str | None:
     """Use Gemini to generate a company description with giveaway words redacted as asterisks."""
     if not GEMINI_API_KEY:
         print("  No GEMINI_API_KEY set, skipping AI description")
         return None
 
-    prompt = f"""You are generating a hint for a stock guessing game called canDLE. Players see an anonymized stock chart and buy hints to guess the company ticker.
+    prompt = f"""You are generating a hint for a stock guessing game called canDLE. Players see an anonymized stock chart and buy hints to guess the company ticker. Other facts about the company (sector, industry, country, IPO year, market cap) are sold as SEPARATE purchaseable hints in the game, so the description MUST NOT reveal any of those either.
 
-Generate a 2-3 sentence description of {name} (ticker: {ticker}, sector: {sector}, industry: {industry}).
+Generate a 2-3 sentence description of {name} (ticker: {ticker}).
 
-The description should be helpful and informative — giving clues about what the company does, its history, or notable facts — but with ALL giveaway words replaced by asterisks matching the EXACT character count of each replaced word.
+The description should give clues about what the company does or why it is notable, but with ALL giveaway words replaced by asterisks matching the EXACT character count of each replaced word.
 
-Words you MUST redact (replace with asterisks equal to character count):
+Words you MUST redact (replace each word with asterisks equal to its character count):
 - The company name or any part of it (e.g., "Apple" → "*****", "Microsoft" → "*********")
 - The ticker symbol (e.g., "TSLA" → "****")
 - Founder/CEO names (e.g., "Elon Musk" → "**** ****", "Jeff Bezos" → "**** *****")
-- Flagship product or service names that immediately identify the company (e.g., "iPhone" → "******", "Windows" → "*******", "Gmail" → "*****")
+- Flagship product or service names that immediately identify the company (e.g., "iPhone" → "******", "Windows" → "*******")
 - Well-known brand names, subsidiaries, or acquisitions that are dead giveaways
+- The sector "{sector}" and industry "{industry}" or similar phrasing — sold as a separate hint
+- The headquarters country "{country}" and any headquarters city — sold as a separate hint
+- Any founding year, IPO year ({ipo_year or 'unknown'}), or other specific years — sold as a separate hint
+- Any specific stock price, 52-week high/low, or market cap figures — sold as separate hints
 
 Words you must NOT redact:
-- Generic industry terms (electric vehicles, cloud computing, social media, semiconductors, streaming)
-- Country or city names
-- General business terms (revenue, market share, founded, headquartered)
-- Years and numbers
+- Generic descriptions of what the company does (e.g., "operates an online marketplace", "manufactures electric vehicles")
+- General business terms (revenue, market share, growth, users)
+
+IMPORTANT: Do NOT mention founding years, IPO years, headquarters location, sector, or industry even in redacted form. Simply omit those facts. Focus entirely on WHAT the company does and WHY it's notable.
 
 Return ONLY the final redacted description. No quotes, no explanation, no preamble.
 
-Example output for a hypothetical company:
-Founded in 2004, this social media company operates the world's largest online social networking platform with over 3 billion monthly active users. The company, led by CEO **** **********, also owns popular messaging and photo-sharing apps including ********* and ********."""
+Example good output:
+This company operates the world's largest online social networking platform with over 3 billion monthly active users. Led by CEO **** **********, it also owns popular messaging and photo-sharing apps including ********* and ********. It has invested heavily in virtual reality and metaverse technologies."""
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemma-3-12b-it:generateContent?key={GEMINI_API_KEY}"
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
@@ -136,7 +143,7 @@ Founded in 2004, this social media company operates the world's largest online s
 
     for attempt in range(3):
         try:
-            resp = requests.post(url, json=payload, timeout=20)
+            resp = requests.post(url, json=payload, timeout=45)
             if resp.status_code == 429:
                 wait = 5 * (attempt + 1)
                 print(f"  Rate limited, waiting {wait}s...")
@@ -250,20 +257,6 @@ def generate_from_ticker(ticker: str) -> dict:
     market_cap = info.get("marketCap", 0)
     market_cap_range = classify_market_cap(market_cap)
 
-    # Try Gemini for a smart redacted description
-    description = generate_description_gemini(ticker, name, sector, industry)
-
-    # Fallback: basic description from yfinance
-    if not description:
-        raw = info.get("longBusinessSummary", "")
-        if raw:
-            sentences = raw.split(". ")
-            description = sentences[0] + "."
-            description = description.replace(name, "The company")
-            description = description.replace(ticker, "[TICKER]")
-        else:
-            description = f"A publicly traded company in the {sector} sector."
-
     ipo_year = None
     try:
         from datetime import datetime, timezone
@@ -276,6 +269,22 @@ def generate_from_ticker(ticker: str) -> dict:
                 ipo_year = datetime.fromtimestamp(first_trade_ms / 1000, tz=timezone.utc).year
     except Exception:
         pass
+
+    # Try Gemini for a smart redacted description (pass all hint fields so it knows what to omit)
+    description = generate_description_gemini(
+        ticker, name, sector, industry, country, ipo_year
+    )
+
+    # Fallback: basic description from yfinance
+    if not description:
+        raw = info.get("longBusinessSummary", "")
+        if raw:
+            sentences = raw.split(". ")
+            description = sentences[0] + "."
+            description = description.replace(name, "The company")
+            description = description.replace(ticker, "[TICKER]")
+        else:
+            description = f"A publicly traded company."
 
     puzzle_def = {
         "id": ticker.lower(),
