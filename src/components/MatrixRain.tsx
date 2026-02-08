@@ -46,7 +46,7 @@ export function MatrixRain({ onComplete, ticker, score }: MatrixRainProps) {
     const draw = () => {
       if (!running) return;
 
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+      ctx.fillStyle = 'rgba(26, 26, 26, 0.06)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       for (let i = 0; i < columns; i++) {
@@ -56,14 +56,14 @@ export function MatrixRain({ onComplete, ticker, score }: MatrixRainProps) {
         const x = i * fontSize;
         const y = drops[i] * fontSize;
 
-        // Head of the stream — bright green
-        ctx.fillStyle = '#00FF41';
-        ctx.font = `${fontSize}px "JetBrains Mono", monospace`;
+        // Head of the stream — bright amber
+        ctx.fillStyle = '#FF9900';
+        ctx.font = `${fontSize}px "Roboto Mono", monospace`;
         ctx.fillText(char, x, y);
 
         // Trail character slightly behind — dimmer
         if (drops[i] > 1) {
-          ctx.fillStyle = 'rgba(0, 255, 65, 0.4)';
+          ctx.fillStyle = 'rgba(255, 153, 0, 0.4)';
           ctx.fillText(
             CHARS[Math.floor(Math.random() * CHARS.length)],
             x,
@@ -73,7 +73,7 @@ export function MatrixRain({ onComplete, ticker, score }: MatrixRainProps) {
 
         // Even more behind — very dim
         if (drops[i] > 3) {
-          ctx.fillStyle = 'rgba(0, 255, 65, 0.15)';
+          ctx.fillStyle = 'rgba(255, 153, 0, 0.15)';
           ctx.fillText(
             CHARS[Math.floor(Math.random() * CHARS.length)],
             x,
@@ -118,9 +118,9 @@ export function MatrixRain({ onComplete, ticker, score }: MatrixRainProps) {
           ${showResult ? 'opacity-100' : 'opacity-0'}
         `}
       >
-        <div className="bg-black/80 border border-terminal-green p-8 text-center">
-          <div className="text-[10px] text-terminal-green tracking-[0.5em] uppercase mb-2">
-            // CORRECT //
+        <div className="bg-terminal-black/80 border border-terminal-green p-8 text-center">
+          <div className="text-[10px] text-terminal-muted tracking-[0.5em] uppercase mb-2">
+            CORRECT
           </div>
           <div className="text-5xl font-mono font-bold text-terminal-green mb-2">
             {ticker}

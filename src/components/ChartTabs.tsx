@@ -16,7 +16,7 @@ export function ChartTabs() {
   const isUnlocked = (key: Timeframe) => key === '1m' || revealedHints.includes(key);
 
   return (
-    <div className="flex gap-0 border border-terminal-border border-t-0">
+    <div className="flex gap-0 border border-terminal-border border-t-0 bg-terminal-dark">
       {TABS.map(({ key, label }) => {
         const unlocked = isUnlocked(key);
         const active = activeChart === key;
@@ -31,10 +31,10 @@ export function ChartTabs() {
               border-r border-terminal-border last:border-r-0
               transition-colors duration-100
               ${active
-                ? 'bg-terminal-green-dark text-terminal-green'
+                ? 'bg-terminal-green-dark text-terminal-green border-b-2 border-b-terminal-green'
                 : unlocked
-                  ? 'bg-terminal-panel text-terminal-muted hover:text-terminal-green hover:bg-terminal-dark'
-                  : 'bg-terminal-black text-terminal-border cursor-not-allowed'
+                  ? 'text-terminal-muted hover:text-terminal-green hover:bg-terminal-panel'
+                  : 'text-terminal-border cursor-not-allowed'
               }
             `}
           >

@@ -10,7 +10,7 @@ export function GuessList({ guesses, correctTicker, won }: GuessListProps) {
   if (guesses.length === 0) return null;
 
   return (
-    <div className="space-y-1 mt-2">
+    <div className="space-y-0 mt-2 border border-terminal-border">
       {guesses.map((guess, i) => {
         const isCorrect = guess === correctTicker && i === guesses.length - 1 && won;
         return (
@@ -18,16 +18,18 @@ export function GuessList({ guesses, correctTicker, won }: GuessListProps) {
             key={`${guess}-${i}`}
             className={`
               flex items-center gap-3 px-3 py-1.5 text-xs font-mono
-              ${isCorrect
-                ? 'text-terminal-green'
-                : 'text-terminal-red'
-              }
+              border-b border-terminal-border last:border-b-0
+              ${isCorrect ? 'bg-fin-green/10' : ''}
             `}
           >
-            <span className="w-4">{isCorrect ? '\u2713' : '\u2717'}</span>
-            <span className="font-semibold">{guess}</span>
+            <span className={`w-4 ${isCorrect ? 'text-fin-green' : 'text-terminal-red'}`}>
+              {isCorrect ? '\u2713' : '\u2717'}
+            </span>
+            <span className={`font-semibold ${isCorrect ? 'text-fin-green' : 'text-terminal-text'}`}>
+              {guess}
+            </span>
             {!isCorrect && (
-              <span className="text-terminal-muted">(-{WRONG_GUESS_PENALTY})</span>
+              <span className="text-terminal-red/60 ml-auto">-{WRONG_GUESS_PENALTY}</span>
             )}
           </div>
         );

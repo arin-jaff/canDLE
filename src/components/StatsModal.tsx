@@ -12,7 +12,6 @@ export function StatsModal({ stats, onClose }: StatsModalProps) {
 
   const maxDist = Math.max(...stats.scoreDistribution, 1);
 
-  // Countdown to next puzzle
   const now = new Date();
   const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
   const diff = tomorrow.getTime() - now.getTime();
@@ -20,13 +19,13 @@ export function StatsModal({ stats, onClose }: StatsModalProps) {
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70" onClick={onClose}>
       <div
         className="w-full max-w-sm border border-terminal-border bg-terminal-black mx-4"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-terminal-border px-4 py-3">
-          <span className="text-xs text-terminal-green tracking-widest uppercase">STATISTICS</span>
+        <div className="flex items-center justify-between border-b border-terminal-border px-4 py-3 bg-terminal-dark">
+          <span className="text-[11px] text-terminal-muted tracking-widest uppercase font-medium">STATISTICS</span>
           <button
             onClick={onClose}
             className="text-terminal-muted hover:text-terminal-green text-sm"
@@ -36,7 +35,7 @@ export function StatsModal({ stats, onClose }: StatsModalProps) {
         </div>
 
         <div className="p-4 space-y-4">
-          <div className="grid grid-cols-4 gap-[1px] bg-terminal-border text-center">
+          <div className="grid grid-cols-4 gap-px bg-terminal-border text-center">
             {[
               { value: stats.gamesPlayed, label: 'PLAYED' },
               { value: stats.gamesWon, label: 'WON' },
@@ -44,7 +43,7 @@ export function StatsModal({ stats, onClose }: StatsModalProps) {
               { value: stats.maxStreak, label: 'MAX' },
             ].map(({ value, label }) => (
               <div key={label} className="bg-terminal-panel p-3">
-                <div className="text-xl font-mono font-bold text-terminal-text">{value}</div>
+                <div className="text-xl font-mono font-bold text-terminal-green">{value}</div>
                 <div className="text-[8px] text-terminal-muted tracking-widest uppercase">{label}</div>
               </div>
             ))}
@@ -52,7 +51,7 @@ export function StatsModal({ stats, onClose }: StatsModalProps) {
 
           <div>
             <div className="text-[10px] text-terminal-muted tracking-widest uppercase mb-2">
-              AVG SCORE: {avgScore}
+              AVG SCORE: <span className="text-terminal-green font-mono">{avgScore}</span>
             </div>
           </div>
 

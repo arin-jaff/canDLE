@@ -91,7 +91,6 @@ export function ScheduleEditor({ onPreviewPuzzle }: ScheduleEditorProps) {
       const res = await fetch(`/api/admin/generate?ticker=${t}`);
       if (res.ok) {
         handleSetTicker(date, t);
-        // Refresh available list
         const puzzlesRes = await fetch('/api/admin/puzzles');
         if (puzzlesRes.ok) setAvailable(await puzzlesRes.json());
         setStatus(`${t} READY`);
@@ -127,7 +126,7 @@ export function ScheduleEditor({ onPreviewPuzzle }: ScheduleEditorProps) {
       <div className="border border-terminal-border max-h-[400px] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center text-[9px] text-terminal-muted tracking-widest uppercase
-          border-b border-terminal-border bg-terminal-panel sticky top-0 z-10">
+          border-b border-terminal-border bg-terminal-dark sticky top-0 z-10">
           <div className="w-24 px-2 py-1.5 border-r border-terminal-border">DATE</div>
           <div className="flex-1 px-2 py-1.5 border-r border-terminal-border">TICKER</div>
           <div className="w-28 px-2 py-1.5 text-center">ACTIONS</div>
@@ -181,8 +180,8 @@ export function ScheduleEditor({ onPreviewPuzzle }: ScheduleEditorProps) {
                       }}
                       autoFocus
                       placeholder="TICKER"
-                      className="w-20 bg-terminal-dark text-terminal-text text-xs px-1.5 py-0.5
-                        border border-terminal-green font-mono outline-none placeholder:text-terminal-border"
+                      className="w-20 bg-terminal-panel text-terminal-text text-xs px-1.5 py-0.5
+                        border border-terminal-yellow font-mono outline-none placeholder:text-terminal-border"
                     />
                     <button
                       onClick={() => {
@@ -193,8 +192,8 @@ export function ScheduleEditor({ onPreviewPuzzle }: ScheduleEditorProps) {
                           handleGenerateAndSet(date, t);
                         }
                       }}
-                      className="text-[9px] text-terminal-green hover:text-terminal-black
-                        hover:bg-terminal-green px-1.5 border border-terminal-green transition-colors"
+                      className="text-[9px] text-terminal-yellow hover:text-terminal-black
+                        hover:bg-terminal-yellow px-1.5 border border-terminal-yellow transition-colors"
                     >
                       OK
                     </button>
@@ -266,7 +265,7 @@ export function ScheduleEditor({ onPreviewPuzzle }: ScheduleEditorProps) {
             </span>
           ))}
         </div>
-        <div className="text-[8px] text-terminal-border mt-1">
+        <div className="text-[8px] text-terminal-muted mt-1">
           Editing a date with a new ticker auto-fetches from Yahoo Finance
         </div>
       </div>

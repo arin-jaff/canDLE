@@ -59,10 +59,7 @@ export function GuessInput({ onSubmit, disabled, previousGuesses }: GuessInputPr
 
   return (
     <div className="relative">
-      <div className="flex border border-terminal-border">
-        <span className="px-3 py-2.5 text-terminal-green text-sm bg-terminal-panel border-r border-terminal-border select-none">
-          {'>'}
-        </span>
+      <div className="flex border border-terminal-border bg-terminal-dark">
         <input
           ref={inputRef}
           type="text"
@@ -75,9 +72,9 @@ export function GuessInput({ onSubmit, disabled, previousGuesses }: GuessInputPr
           onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
           onKeyDown={handleKeyDown}
           disabled={disabled}
-          placeholder={disabled ? 'GAME OVER' : 'ENTER TICKER OR COMPANY NAME...'}
+          placeholder={disabled ? 'GAME OVER' : 'Search ticker or company...'}
           className={`
-            flex-1 bg-terminal-black text-terminal-text text-sm px-3 py-2.5
+            flex-1 bg-transparent text-terminal-text text-sm px-3 py-2.5
             font-mono placeholder:text-terminal-border
             outline-none
             ${disabled ? 'opacity-40 cursor-not-allowed' : ''}
@@ -87,7 +84,7 @@ export function GuessInput({ onSubmit, disabled, previousGuesses }: GuessInputPr
           onClick={() => handleSubmit()}
           disabled={disabled || filtered.length === 0}
           className={`
-            px-5 py-2.5 text-xs font-mono uppercase tracking-wider
+            px-5 py-2.5 text-xs font-semibold uppercase tracking-wider
             border-l border-terminal-border
             transition-colors duration-100
             ${disabled || filtered.length === 0

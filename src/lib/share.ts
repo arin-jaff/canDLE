@@ -16,7 +16,7 @@ export function generateShareText(
     `canDLE #${puzzleNumber} \u2014 ${won ? score : 'X'}/${STARTING_BANKROLL}`,
     bar,
     `Hints: ${hintsUsed} | Guesses: ${guessCount}`,
-    'candle.game',
+    'candle.arinjaff.com',
   ];
 
   return lines.join('\n');

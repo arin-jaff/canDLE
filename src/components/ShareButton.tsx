@@ -19,7 +19,6 @@ export function ShareButton({ puzzleNumber, score, hintsUsed, guessCount, won }:
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // fallback
       const textarea = document.createElement('textarea');
       textarea.value = text;
       document.body.appendChild(textarea);
@@ -35,7 +34,7 @@ export function ShareButton({ puzzleNumber, score, hintsUsed, guessCount, won }:
     <button
       onClick={handleShare}
       className="w-full border border-terminal-green bg-terminal-green-dark text-terminal-green
-        py-2.5 px-4 text-xs font-mono uppercase tracking-widest
+        py-2.5 px-4 text-xs font-semibold uppercase tracking-widest
         hover:bg-terminal-green hover:text-terminal-black
         transition-colors duration-100"
     >

@@ -62,14 +62,14 @@ export function Intro({ onComplete }: IntroProps) {
       <div
         className="absolute inset-0 pointer-events-none opacity-[0.03]"
         style={{
-          background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #00FF41 2px, #00FF41 3px)',
+          background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, #FF9900 2px, #FF9900 3px)',
         }}
       />
 
       <div className="w-full max-w-lg px-8">
         {/* Logo */}
         <div className="mb-6 text-center">
-          <div className="text-4xl font-mono font-bold tracking-widest mb-1">
+          <div className="text-4xl font-bold tracking-widest mb-1">
             <span className="text-terminal-text">can</span>
             <span className="text-terminal-green">DLE</span>
           </div>
