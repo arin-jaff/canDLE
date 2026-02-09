@@ -104,33 +104,56 @@ def generate_description_gemini(
         print("  No GEMINI_API_KEY set, skipping AI description")
         return None
 
-    prompt = f"""You are generating a hint for a stock guessing game called canDLE. Players see an anonymized stock chart and buy hints to guess the company ticker. Other facts about the company (sector, industry, country, IPO year, market cap) are sold as SEPARATE purchaseable hints in the game, so the description MUST NOT reveal any of those either.
+    # --- OLD PROMPT (over-censored) ---
+    # prompt = f"""You are generating a hint for a stock guessing game called canDLE. Players see an anonymized stock chart and buy hints to guess the company ticker. Other facts about the company (sector, industry, country, IPO year, market cap) are sold as SEPARATE purchaseable hints in the game, so the description MUST NOT reveal any of those either.
+    #
+    # Generate a 2-3 sentence description of {name} (ticker: {ticker}).
+    #
+    # The description should give clues about what the company does or why it is notable, but with ALL giveaway words replaced by asterisks matching the EXACT character count of each replaced word.
+    #
+    # Words you MUST redact (replace each word with asterisks equal to its character count):
+    # - The company name or any part of it (e.g., "Apple" → "*****", "Microsoft" → "*********")
+    # - The ticker symbol (e.g., "TSLA" → "****")
+    # - Founder/CEO names (e.g., "Elon Musk" → "**** ****", "Jeff Bezos" → "**** *****")
+    # - Flagship product or service names that immediately identify the company (e.g., "iPhone" → "******", "Windows" → "*******")
+    # - Well-known brand names, subsidiaries, or acquisitions that are dead giveaways
+    # - The sector "{sector}" and industry "{industry}" or similar phrasing — sold as a separate hint
+    # - The headquarters country "{country}" and any headquarters city — sold as a separate hint
+    # - Any founding year, IPO year ({ipo_year or 'unknown'}), or other specific years — sold as a separate hint
+    # - Any specific stock price, 52-week high/low, or market cap figures — sold as separate hints
+    #
+    # Words you must NOT redact:
+    # - Generic descriptions of what the company does (e.g., "operates an online marketplace", "manufactures electric vehicles")
+    # - General business terms (revenue, market share, growth, users)
+    #
+    # IMPORTANT: Do NOT mention founding years, IPO years, headquarters location, sector, or industry even in redacted form. Simply omit those facts. Focus entirely on WHAT the company does and WHY it's notable.
+    #
+    # Return ONLY the final redacted description. No quotes, no explanation, no preamble.
+    #
+    # Example good output:
+    # This company operates the world's largest online social networking platform with over 3 billion monthly active users. Led by CEO **** **********, it also owns popular messaging and photo-sharing apps including ********* and ********. It has invested heavily in virtual reality and metaverse technologies."""
+
+    prompt = f"""You are generating a hint for a stock guessing game called canDLE. Players see an anonymized stock chart and buy hints to guess the company ticker.
 
 Generate a 2-3 sentence description of {name} (ticker: {ticker}).
 
-The description should give clues about what the company does or why it is notable, but with ALL giveaway words replaced by asterisks matching the EXACT character count of each replaced word.
+The description should be informative and give real clues about what the company does, its products, services, and why it is notable. Be specific and helpful — the player is paying in-game currency for this hint.
 
-Words you MUST redact (replace each word with asterisks equal to its character count):
-- The company name or any part of it (e.g., "Apple" → "*****", "Microsoft" → "*********")
+ONLY redact words that would IMMEDIATELY give away the answer. Replace each redacted word with asterisks matching its character count:
+- The company name or any part of it (e.g., "Apple" → "*****")
 - The ticker symbol (e.g., "TSLA" → "****")
-- Founder/CEO names (e.g., "Elon Musk" → "**** ****", "Jeff Bezos" → "**** *****")
-- Flagship product or service names that immediately identify the company (e.g., "iPhone" → "******", "Windows" → "*******")
-- Well-known brand names, subsidiaries, or acquisitions that are dead giveaways
-- The sector "{sector}" and industry "{industry}" or similar phrasing — sold as a separate hint
-- The headquarters country "{country}" and any headquarters city — sold as a separate hint
-- Any founding year, IPO year ({ipo_year or 'unknown'}), or other specific years — sold as a separate hint
-- Any specific stock price, 52-week high/low, or market cap figures — sold as separate hints
+- Flagship product names that are uniquely associated with the company (e.g., "iPhone" → "******", "Windows" → "*******", "Big Mac" → "*** ***")
 
-Words you must NOT redact:
-- Generic descriptions of what the company does (e.g., "operates an online marketplace", "manufactures electric vehicles")
-- General business terms (revenue, market share, growth, users)
+Do NOT redact:
+- General descriptions of what the company does (e.g., "electric vehicles", "cloud computing", "social media")
+- CEO/founder names — these are fair game as clues
+- Subsidiary or brand names that aren't dead giveaways
+- Industry terms, business metrics, or general facts
 
-IMPORTANT: Do NOT mention founding years, IPO years, headquarters location, sector, or industry even in redacted form. Simply omit those facts. Focus entirely on WHAT the company does and WHY it's notable.
-
-Return ONLY the final redacted description. No quotes, no explanation, no preamble.
+Return ONLY the description. No quotes, no explanation, no preamble.
 
 Example good output:
-This company operates the world's largest online social networking platform with over 3 billion monthly active users. Led by CEO **** **********, it also owns popular messaging and photo-sharing apps including ********* and ********. It has invested heavily in virtual reality and metaverse technologies."""
+Founded by Mark Zuckerberg, this company operates the world's largest social networking platform with over 3 billion monthly active users. It also owns popular messaging and photo-sharing apps including ********* and ********. The company has invested heavily in virtual reality and metaverse technologies through its ******* *** division."""
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemma-3-12b-it:generateContent?key={GEMINI_API_KEY}"
     payload = {

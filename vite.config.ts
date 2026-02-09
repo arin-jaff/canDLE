@@ -1,7 +1,7 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import { execSync } from 'child_process'
+import { execSync, exec } from 'child_process'
 import { readFileSync, writeFileSync, readdirSync } from 'fs'
 import { join } from 'path'
 import type { Plugin } from 'vite'
@@ -87,7 +87,7 @@ function adminApiPlugin(): Plugin {
           return
         }
 
-        // List available puzzle tickers
+        // List available puzzle tickers (with description + difficulty)
         if (url.pathname === '/api/admin/puzzles' && req.method === 'GET') {
           try {
             const dir = join(process.cwd(), 'public/puzzles')
@@ -95,13 +95,76 @@ function adminApiPlugin(): Plugin {
             const tickers = files.map(f => {
               try {
                 const data = JSON.parse(readFileSync(join(dir, f), 'utf-8'))
-                return { file: f, ticker: data.answer?.ticker || f.replace('.json', '').toUpperCase(), name: data.answer?.name || '' }
+                return {
+                  file: f,
+                  ticker: data.answer?.ticker || f.replace('.json', '').toUpperCase(),
+                  name: data.answer?.name || '',
+                  description: data.hints?.description || '',
+                  difficulty: data.difficulty ?? null,
+                }
               } catch {
-                return { file: f, ticker: f.replace('.json', '').toUpperCase(), name: '' }
+                return { file: f, ticker: f.replace('.json', '').toUpperCase(), name: '', description: '', difficulty: null }
               }
             })
             res.writeHead(200, { 'Content-Type': 'application/json' })
             res.end(JSON.stringify(tickers))
+          } catch (e: unknown) {
+            const msg = e instanceof Error ? e.message : String(e)
+            res.writeHead(500, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ error: msg }))
+          }
+          return
+        }
+
+        // Regenerate description for a ticker
+        if (url.pathname === '/api/admin/regen-description' && req.method === 'GET') {
+          const ticker = url.searchParams.get('ticker')
+          if (!ticker) {
+            res.writeHead(400, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ error: 'Missing ticker param' }))
+            return
+          }
+          const sanitized = ticker.replace(/[^a-zA-Z0-9.]/g, '')
+          const child = exec(
+            `${PYTHON} scripts/regen_description.py ${sanitized}`,
+            {
+              cwd: process.cwd(),
+              timeout: 120000,
+              encoding: 'utf-8',
+              env: { ...process.env, GEMINI_API_KEY },
+            },
+            (err, stdout, stderr) => {
+              if (err) {
+                const msg = stderr || err.message
+                res.writeHead(500, { 'Content-Type': 'application/json' })
+                res.end(JSON.stringify({ error: msg }))
+              } else {
+                res.writeHead(200, { 'Content-Type': 'application/json' })
+                res.end(JSON.stringify({ ok: true, ticker: sanitized, output: stdout }))
+              }
+            }
+          )
+          void child
+          return
+        }
+
+        // Save manually edited description for a ticker
+        if (url.pathname === '/api/admin/save-description' && req.method === 'POST') {
+          try {
+            const body = await readBody(req)
+            const { ticker, description } = JSON.parse(body)
+            if (!ticker || typeof description !== 'string') {
+              res.writeHead(400, { 'Content-Type': 'application/json' })
+              res.end(JSON.stringify({ error: 'Missing ticker or description' }))
+              return
+            }
+            const sanitized = ticker.replace(/[^a-zA-Z0-9.]/g, '').toLowerCase()
+            const filePath = join(process.cwd(), 'public/puzzles', `${sanitized}.json`)
+            const puzzle = JSON.parse(readFileSync(filePath, 'utf-8'))
+            puzzle.hints.description = description
+            writeFileSync(filePath, JSON.stringify(puzzle, null, 2))
+            res.writeHead(200, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ ok: true }))
           } catch (e: unknown) {
             const msg = e instanceof Error ? e.message : String(e)
             res.writeHead(500, { 'Content-Type': 'application/json' })

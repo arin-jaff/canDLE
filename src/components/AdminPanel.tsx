@@ -1,4 +1,5 @@
 import { ScheduleEditor } from './ScheduleEditor';
+import { TickerStatus } from './TickerStatus';
 
 interface AdminPanelProps {
   currentPuzzleId: string;
@@ -38,6 +39,8 @@ export function AdminPanel({ currentPuzzleId, onLoadTicker, onReset, onClose }: 
 
         <div className="p-4 space-y-4">
           <ScheduleEditor onPreviewPuzzle={handlePreview} />
+
+          <TickerStatus />
 
           <div className="border-t border-terminal-border pt-4">
             <button
