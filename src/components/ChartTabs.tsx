@@ -6,7 +6,7 @@ const TABS: { key: Timeframe; label: string }[] = [
   { key: '1m', label: '1M' },
   { key: '1y', label: '1Y' },
   { key: '5y', label: '5Y' },
-  { key: '10y', label: '10Y' },
+  { key: '10y', label: 'ALL' },
 ];
 
 export function ChartTabs() {

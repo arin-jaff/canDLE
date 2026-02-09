@@ -216,7 +216,7 @@ def classify_market_cap(cap: float) -> str:
 
 
 def fetch_chart_data(ticker: str, period: str):
-    """Fetch historical data and return as [[unix_timestamp, pct_change], ...] + base_price."""
+    """Fetch historical OHLC data and return as [[ts, open%, high%, low%, close%], ...] + base_price."""
     stock = yf.Ticker(ticker)
     hist = stock.history(period=period)
     if hist.empty:
@@ -233,12 +233,18 @@ def fetch_chart_data(ticker: str, period: str):
 
     result = []
     for date, row in hist.iterrows():
-        close = sanitize_float(row["Close"])
-        if close == 0:
+        o = sanitize_float(row.get("Open", row["Close"]))
+        h = sanitize_float(row.get("High", row["Close"]))
+        l = sanitize_float(row.get("Low", row["Close"]))
+        c = sanitize_float(row["Close"])
+        if c == 0:
             continue
         ts = int(date.timestamp())
-        pct = ((close - base_price) / base_price) * 100
-        result.append([ts, round(pct, 2)])
+        o_pct = round(((o - base_price) / base_price) * 100, 2)
+        h_pct = round(((h - base_price) / base_price) * 100, 2)
+        l_pct = round(((l - base_price) / base_price) * 100, 2)
+        c_pct = round(((c - base_price) / base_price) * 100, 2)
+        result.append([ts, o_pct, h_pct, l_pct, c_pct])
     return result, base_price
 
 
@@ -259,7 +265,7 @@ def generate_puzzle(puzzle_def: dict) -> dict:
     charts = {}
     base_prices = {}
 
-    for period_key, yf_period in [("1y", "1y"), ("1m", "1mo"), ("5y", "5y"), ("10y", "10y")]:
+    for period_key, yf_period in [("1y", "1y"), ("1m", "1mo"), ("5y", "5y"), ("10y", "max")]:
         try:
             data, bp = fetch_chart_data(ticker, yf_period)
             charts[period_key] = data

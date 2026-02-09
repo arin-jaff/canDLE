@@ -1,5 +1,5 @@
 export const STARTING_BANKROLL = 1000;
-export const WRONG_GUESS_PENALTY = 150;
+export const WRONG_GUESS_PENALTY = 50;
 
 export interface HintDef {
   id: string;
@@ -17,7 +17,7 @@ export const HINT_DEFINITIONS: HintDef[] = [
   { id: 'industry', label: 'INDUSTRY', cost: 125, type: 'text' },
   { id: 'high52w', label: '52W HIGH/LOW', cost: 150, type: 'text' },
   { id: '5y', label: '5Y CHART', cost: 200, type: 'chart' },
-  { id: '10y', label: '10Y CHART', cost: 250, type: 'chart' },
+  { id: '10y', label: 'ALL-TIME CHART', cost: 250, type: 'chart' },
   { id: 'priceAxis', label: 'PRICE AXIS', cost: 250, type: 'price' },
   { id: 'description', label: 'DESCRIPTION', cost: 300, type: 'text' },
 ];
