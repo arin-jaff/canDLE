@@ -215,17 +215,17 @@ def generate_puzzle(puzzle_def: dict) -> dict:
     print(f"Fetching data for {ticker}...")
 
     charts = {}
-    base_price = 0
+    base_prices = {}
 
     for period_key, yf_period in [("1y", "1y"), ("1m", "1mo"), ("5y", "5y"), ("10y", "10y")]:
         try:
             data, bp = fetch_chart_data(ticker, yf_period)
             charts[period_key] = data
-            if period_key == "1y":
-                base_price = bp
+            base_prices[period_key] = round(bp, 2)
         except Exception as e:
             print(f"  Warning: failed to fetch {period_key} for {ticker}: {e}")
             charts[period_key] = []
+            base_prices[period_key] = 0
 
     high52w, low52w = get_52w_high_low(ticker)
 
@@ -236,7 +236,8 @@ def generate_puzzle(puzzle_def: dict) -> dict:
     return {
         "id": puzzle_def["id"],
         "answer": {"ticker": ticker, "name": puzzle_def["name"]},
-        "basePrice": round(base_price, 2),
+        "basePrice": base_prices.get("1m", 0),
+        "basePrices": base_prices,
         "charts": charts,
         "hints": hints,
     }

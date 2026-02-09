@@ -4,7 +4,13 @@
     "ticker": "CRM",
     "name": "Salesforce, Inc."
   },
-  "basePrice": 323.72,
+  "basePrice": 266.12,
+  "basePrices": {
+    "1y": 323.72,
+    "1m": 266.12,
+    "5y": 236.06,
+    "10y": 53.4
+  },
   "charts": {
     "1y": [
       [
@@ -8327,7 +8333,7 @@
       ],
       [
         1523592000,
-        120.18
+        120.19
       ],
       [
         1523851200,
@@ -8547,7 +8553,7 @@
       ],
       [
         1530504000,
-        159.82
+        159.81
       ],
       [
         1530590400,
@@ -8615,7 +8621,7 @@
       ],
       [
         1532577600,
-        173.03
+        173.02
       ],
       [
         1532664000,
@@ -10083,7 +10089,7 @@
       ],
       [
         1578632400,
-        233.4
+        233.39
       ],
       [
         1578891600,
@@ -11115,7 +11121,7 @@
       ],
       [
         1611118800,
-        313.4
+        313.39
       ],
       [
         1611205200,
@@ -11747,7 +11753,7 @@
       ],
       [
         1630641600,
-        394.14
+        394.13
       ],
       [
         1630987200,
@@ -11943,7 +11949,7 @@
       ],
       [
         1636693200,
-        467.35
+        467.34
       ],
       [
         1636952400,
@@ -14487,7 +14493,7 @@
       ],
       [
         1716868800,
-        399.88
+        399.87
       ],
       [
         1716955200,
@@ -15131,7 +15137,7 @@
       ],
       [
         1737090000,
-        503.84
+        503.83
       ],
       [
         1737435600,
@@ -15723,7 +15729,7 @@
       ],
       [
         1755748800,
-        358.81
+        358.8
       ],
       [
         1755835200,
@@ -15983,7 +15989,7 @@
       ],
       [
         1763701200,
-        324.61
+        324.6
       ],
       [
         1763960400,
@@ -16196,7 +16202,7 @@
     "industry": "Software - Application",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This business provides a ******* platform for managing customer relationships and automating sales processes. It helps businesses of all sizes improve their interactions with clients and streamline their operations, driving significant revenue *********. Its widespread adoption has made it a leader in its field, impacting countless organizations globally.",
+    "description": "The company",
     "ipoYear": 2004,
     "high52w": 331.65,
     "low52w": 187.12

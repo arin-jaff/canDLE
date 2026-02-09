@@ -4,7 +4,13 @@
     "ticker": "AMZN",
     "name": "Amazon.com, Inc."
   },
-  "basePrice": 229.15,
+  "basePrice": 241.56,
+  "basePrices": {
+    "1y": 229.15,
+    "1m": 241.56,
+    "5y": 166.15,
+    "10y": 24.41
+  },
   "charts": {
     "1y": [
       [
@@ -16196,7 +16202,7 @@
     "industry": "Internet Retail",
     "marketCapRange": "Mega Cap (>$200B)",
     "hqCountry": "United States",
-    "description": "This business operates a vast online marketplace, offering a wide range of products and services to ******* customers. It has significantly expanded into cloud computing and digital advertising, driving substantial revenue *********. The company\u2019s scale and innovation have made it a dominant force in global e-commerce and technology.",
+    "description": "The company",
     "ipoYear": 1997,
     "high52w": 258.6,
     "low52w": 161.38

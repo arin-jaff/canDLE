@@ -5,6 +5,7 @@ export interface PuzzleData {
     name: string;
   };
   basePrice: number;
+  basePrices?: Record<string, number>;
   charts: {
     '1y': number[][];
     '1m': number[][];

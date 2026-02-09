@@ -4,7 +4,13 @@
     "ticker": "TSLA",
     "name": "Tesla, Inc."
   },
-  "basePrice": 361.62,
+  "basePrice": 431.41,
+  "basePrices": {
+    "1y": 361.62,
+    "1m": 431.41,
+    "5y": 287.81,
+    "10y": 9.87
+  },
   "charts": {
     "1y": [
       [

@@ -4,7 +4,13 @@
     "ticker": "META",
     "name": "Meta Platforms, Inc."
   },
-  "basePrice": 712.27,
+  "basePrice": 648.69,
+  "basePrices": {
+    "1y": 712.27,
+    "1m": 648.69,
+    "5y": 264.73,
+    "10y": 99.06
+  },
   "charts": {
     "1y": [
       [
@@ -6207,7 +6213,7 @@
       ],
       [
         1457326800,
-        5.99
+        6.0
       ],
       [
         1457413200,
@@ -6291,7 +6297,7 @@
       ],
       [
         1459915200,
-        13.99
+        14.0
       ],
       [
         1460001600,
@@ -7459,7 +7465,7 @@
       ],
       [
         1496376000,
-        53.99
+        54.0
       ],
       [
         1496635200,
@@ -8403,7 +8409,7 @@
       ],
       [
         1525924800,
-        85.99
+        86.0
       ],
       [
         1526011200,
@@ -9411,7 +9417,7 @@
       ],
       [
         1557720000,
-        81.99
+        82.0
       ],
       [
         1557806400,
@@ -9519,7 +9525,7 @@
       ],
       [
         1561003200,
-        90.0
+        90.01
       ],
       [
         1561089600,
@@ -11923,7 +11929,7 @@
       ],
       [
         1636084800,
-        241.98
+        241.99
       ],
       [
         1636347600,
@@ -15119,7 +15125,7 @@
       ],
       [
         1736830800,
-        498.01
+        498.02
       ],
       [
         1736917200,
@@ -16196,7 +16202,7 @@
     "industry": "Internet Content & Information",
     "marketCapRange": "Mega Cap (>$200B)",
     "hqCountry": "United States",
-    "description": "This ******** operates several popular platforms connecting billions of people worldwide. It generates substantial revenue through advertising and data-driven insights, influencing how many interact and consume information. The business has made significant investments in emerging technologies like the metaverse, aiming to shape the future of digital interaction.",
+    "description": "The company",
     "ipoYear": 2012,
     "high52w": 795.06,
     "low52w": 478.72

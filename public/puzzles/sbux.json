@@ -4,7 +4,13 @@
     "ticker": "SBUX",
     "name": "Starbucks Corporation"
   },
-  "basePrice": 109.3,
+  "basePrice": 86.69,
+  "basePrices": {
+    "1y": 109.3,
+    "1m": 86.69,
+    "5y": 94.94,
+    "10y": 44.13
+  },
   "charts": {
     "1y": [
       [
@@ -2305,7 +2311,7 @@
       ],
       [
         1650254400,
-        -23.47
+        -23.46
       ],
       [
         1650340800,
@@ -2497,7 +2503,7 @@
       ],
       [
         1656302400,
-        -24.79
+        -24.78
       ],
       [
         1656388800,
@@ -9963,7 +9969,7 @@
       ],
       [
         1574744400,
-        67.77
+        67.76
       ],
       [
         1574830800,
@@ -10815,7 +10821,7 @@
       ],
       [
         1601524800,
-        74.81
+        74.82
       ],
       [
         1601611200,
@@ -10959,7 +10965,7 @@
       ],
       [
         1605848400,
-        96.44
+        96.43
       ],
       [
         1606107600,
@@ -16196,7 +16202,7 @@
     "industry": "Restaurants",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This business operates a global chain of retail locations selling ******* and other beverages. It is known for its rewards program and creating a \"third place\" experience between work and home for its customers. The company\u2019s significant global presence and brand recognition have contributed to substantial revenue and market share.",
+    "description": "The company, together with its subsidiaries, operates as a roaster, marketer, and retailer of coffee internationally.",
     "ipoYear": 1992,
     "high52w": 115.04,
     "low52w": 73.95

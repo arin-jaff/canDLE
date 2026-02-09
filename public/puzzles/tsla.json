@@ -4,7 +4,13 @@
     "ticker": "TSLA",
     "name": "Tesla, Inc."
   },
-  "basePrice": 361.62,
+  "basePrice": 431.41,
+  "basePrices": {
+    "1y": 361.62,
+    "1m": 431.41,
+    "5y": 287.81,
+    "10y": 9.87
+  },
   "charts": {
     "1y": [
       [
@@ -16196,7 +16202,7 @@
     "industry": "Auto Manufacturers",
     "marketCapRange": "Mega Cap (>$200B)",
     "hqCountry": "United States",
-    "description": "This business manufactures electric vehicles and designs, develops, and sells ******* for energy generation and storage. It is notable for its focus on sustainable energy and accelerating the world's transition to a ******* future. The company\u2019s innovative approach has significantly impacted the automotive and energy markets, driving substantial *********.",
+    "description": "The company",
     "ipoYear": 2010,
     "high52w": 498.83,
     "low52w": 214.25

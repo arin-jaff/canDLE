@@ -187,7 +187,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
   setActiveChart: (chart) => {
     const { state } = get();
     const chartHints = ['1y', '5y', '10y'];
-    if (chart !== '1m' && !state.revealedHints.includes(chart) && chartHints.includes(chart)) {
+    const gameOver = state.won || state.lost;
+    if (!gameOver && chart !== '1m' && !state.revealedHints.includes(chart) && chartHints.includes(chart)) {
       return;
     }
     const newState = { ...state, activeChart: chart };

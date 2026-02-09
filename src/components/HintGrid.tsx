@@ -31,13 +31,13 @@ export function HintGrid({ puzzle, revealedHints, bankroll, disabled, onBuyHint 
   return (
     <div>
       {/* Category tabs */}
-      <div className="flex border-b border-terminal-border mb-0">
+      <div className="flex border-b border-terminal-border mb-0 divide-x divide-terminal-border">
         {CATEGORIES.map((cat) => (
           <button
             key={cat.key}
             onClick={() => setActiveTab(cat.key)}
             className={`
-              px-3 py-1.5 text-[10px] uppercase tracking-wider transition-colors
+              px-4 py-2 text-[10px] uppercase tracking-wider transition-colors
               ${activeTab === cat.key
                 ? 'text-terminal-green border-b-2 border-terminal-green bg-terminal-green-dark/30'
                 : 'text-terminal-muted hover:text-terminal-text'
@@ -62,7 +62,7 @@ export function HintGrid({ puzzle, revealedHints, bankroll, disabled, onBuyHint 
           <HintCard
             key={hint.id}
             hint={hint}
-            revealed={revealedHints.includes(hint.id)}
+            revealed={disabled || revealedHints.includes(hint.id)}
             puzzle={puzzle}
             bankroll={bankroll}
             disabled={disabled}

@@ -4,7 +4,13 @@
     "ticker": "AMD",
     "name": "Advanced Micro Devices, Inc."
   },
-  "basePrice": 107.56,
+  "basePrice": 210.02,
+  "basePrices": {
+    "1y": 107.56,
+    "1m": 210.02,
+    "5y": 91.47,
+    "10y": 1.93
+  },
   "charts": {
     "1y": [
       [
@@ -16196,7 +16202,7 @@
     "industry": "Semiconductors",
     "marketCapRange": "Mega Cap (>$200B)",
     "hqCountry": "United States",
-    "description": "This business designs and manufactures ******* for computers and other electronic devices. It competes directly with a major player in the ******* space, often pushing the boundaries of performance and innovation. The company\u2019s products are found in everything from gaming consoles to data centers, driving significant *******.",
+    "description": "The company",
     "ipoYear": 1980,
     "high52w": 267.08,
     "low52w": 76.48

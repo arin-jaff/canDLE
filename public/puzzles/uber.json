@@ -4,7 +4,13 @@
     "ticker": "UBER",
     "name": "Uber Technologies, Inc."
   },
-  "basePrice": 74.6,
+  "basePrice": 86.19,
+  "basePrices": {
+    "1y": 74.6,
+    "1m": 86.19,
+    "5y": 59.29,
+    "10y": 41.57
+  },
   "charts": {
     "1y": [
       [
@@ -12920,7 +12926,7 @@
     "industry": "Software - Application",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This business operates a global platform connecting riders and drivers for convenient transportation and delivery services. It has expanded to offer various services, including food ordering and freight solutions, impacting how people move and receive goods. The company\u2019s ******* has grown significantly, reshaping urban mobility and logistics worldwide.",
+    "description": "The company",
     "ipoYear": 2019,
     "high52w": 101.99,
     "low52w": 60.63

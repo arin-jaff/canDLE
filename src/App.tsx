@@ -69,7 +69,7 @@ function App() {
 
   const gameOver = state.won || state.lost;
   const activeChartData = puzzle.charts[state.activeChart];
-  const showPriceAxis = state.revealedHints.includes('priceAxis');
+  const showPriceAxis = gameOver || state.revealedHints.includes('priceAxis');
   const puzzleNumber = getPuzzleNumber();
 
   const handleBuyHint = (hintId: string) => {
@@ -137,7 +137,7 @@ function App() {
               <Chart
                 data={activeChartData}
                 showPriceAxis={showPriceAxis}
-                basePrice={puzzle.basePrice}
+                basePrice={puzzle.basePrices?.[state.activeChart] ?? puzzle.basePrice}
               />
               <ChartTabs />
             </div>
