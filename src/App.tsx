@@ -15,6 +15,7 @@ import { GameOver } from './components/GameOver';
 import { ShareButton } from './components/ShareButton';
 import { StatsModal } from './components/StatsModal';
 import { HowToPlayModal } from './components/HowToPlayModal';
+import { AdSlot } from './components/AdSlot';
 
 function App() {
   const { puzzle, loading, error, loadPuzzleByTicker } = usePuzzle();
@@ -144,6 +145,8 @@ function App() {
 
             <Bankroll bankroll={state.bankroll} />
 
+            <AdSlot adSlot="SLOT_1" format="horizontal" className="h-[60px]" />
+
             {/* Game Over — shown in left panel on desktop */}
             {gameOver && (
               <div className="space-y-3">
@@ -203,6 +206,8 @@ function App() {
                 won={state.won}
               />
             </div>
+
+            <AdSlot adSlot="SLOT_2" format="rectangle" className="min-h-[100px]" />
           </div>
         </div>
       </main>
