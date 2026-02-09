@@ -7,13 +7,14 @@ interface ShareButtonProps {
   hintsUsed: number;
   guessCount: number;
   won: boolean;
+  difficulty?: number;
 }
 
-export function ShareButton({ puzzleNumber, score, hintsUsed, guessCount, won }: ShareButtonProps) {
+export function ShareButton({ puzzleNumber, score, hintsUsed, guessCount, won, difficulty }: ShareButtonProps) {
   const [copied, setCopied] = useState(false);
 
   const handleShare = async () => {
-    const text = generateShareText(puzzleNumber, score, hintsUsed, guessCount, won);
+    const text = generateShareText(puzzleNumber, score, hintsUsed, guessCount, won, difficulty);
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);

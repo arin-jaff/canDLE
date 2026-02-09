@@ -153,6 +153,7 @@ function App() {
                   answer={puzzle.answer}
                   guessCount={state.guesses.length}
                   hintsUsed={state.revealedHints.length}
+                  difficulty={puzzle.difficulty}
                 />
                 <ShareButton
                   puzzleNumber={puzzleNumber}
@@ -160,6 +161,7 @@ function App() {
                   hintsUsed={state.revealedHints.length}
                   guessCount={state.guesses.length}
                   won={state.won}
+                  difficulty={puzzle.difficulty}
                 />
               </div>
             )}

@@ -162,6 +162,48 @@ This company operates the world's largest online social networking platform with
     return None
 
 
+def generate_difficulty_gemini(ticker: str, name: str, sector: str, industry: str) -> int:
+    """Ask Gemini to rate puzzle difficulty 1-5 based on how widely known the stock is."""
+    if not GEMINI_API_KEY:
+        return 3  # default medium
+
+    prompt = f"""Rate how difficult it would be for an average retail investor to identify this stock in a guessing game, on a scale of 1 to 5:
+
+1 = Very Easy (household name, in the news constantly — e.g., Apple, Tesla, Amazon)
+2 = Easy (well-known large cap, most investors would recognize — e.g., Nike, Disney, Coca-Cola)
+3 = Medium (known to active investors but not general public — e.g., Broadcom, Thermo Fisher)
+4 = Hard (niche or B2B company, mainly known to sector specialists — e.g., Verisign, Rollins)
+5 = Very Hard (obscure S&P 500 member, most people have never heard of it — e.g., NRG Energy, Paycom)
+
+Stock: {name} (ticker: {ticker})
+Sector: {sector}
+Industry: {industry}
+
+Reply with ONLY a single digit: 1, 2, 3, 4, or 5. No explanation."""
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemma-3-12b-it:generateContent?key={GEMINI_API_KEY}"
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"temperature": 0.3, "maxOutputTokens": 10},
+    }
+
+    try:
+        resp = requests.post(url, json=payload, timeout=30)
+        if resp.status_code == 429:
+            print("  Difficulty rating rate-limited, defaulting to 3")
+            return 3
+        resp.raise_for_status()
+        result = resp.json()
+        text = result["candidates"][0]["content"]["parts"][0]["text"].strip()
+        digit = int(text[0])
+        if 1 <= digit <= 5:
+            print(f"  Difficulty: {digit}/5")
+            return digit
+    except Exception as e:
+        print(f"  Difficulty rating failed: {e}")
+    return 3
+
+
 def classify_market_cap(cap: float) -> str:
     if cap >= 200e9:
         return "Mega Cap (>$200B)"
@@ -287,6 +329,9 @@ def generate_from_ticker(ticker: str) -> dict:
         else:
             description = f"A publicly traded company."
 
+    # Get difficulty rating from Gemini
+    difficulty = generate_difficulty_gemini(ticker, name, sector, industry)
+
     puzzle_def = {
         "id": ticker.lower(),
         "ticker": ticker,
@@ -301,7 +346,9 @@ def generate_from_ticker(ticker: str) -> dict:
         },
     }
 
-    return generate_puzzle(puzzle_def)
+    result = generate_puzzle(puzzle_def)
+    result["difficulty"] = difficulty
+    return result
 
 
 def main():

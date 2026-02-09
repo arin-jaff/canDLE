@@ -6,9 +6,10 @@ interface GameOverProps {
   answer: { ticker: string; name: string };
   guessCount: number;
   hintsUsed: number;
+  difficulty?: number;
 }
 
-export function GameOver({ won, bankroll, answer, guessCount, hintsUsed }: GameOverProps) {
+export function GameOver({ won, bankroll, answer, guessCount, hintsUsed, difficulty }: GameOverProps) {
   return (
     <div className="border border-terminal-border bg-terminal-panel p-4">
       <div className={`text-center mb-3 ${won ? 'text-fin-green' : 'text-terminal-red'}`}>
@@ -23,7 +24,7 @@ export function GameOver({ won, bankroll, answer, guessCount, hintsUsed }: GameO
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-px bg-terminal-border text-center">
+      <div className={`grid ${difficulty ? 'grid-cols-4' : 'grid-cols-3'} gap-px bg-terminal-border text-center`}>
         <div className="bg-terminal-dark p-2">
           <div className="text-lg font-mono font-bold text-terminal-green">
             {won ? bankroll : 0}
@@ -48,6 +49,16 @@ export function GameOver({ won, bankroll, answer, guessCount, hintsUsed }: GameO
             HINTS
           </div>
         </div>
+        {difficulty && (
+          <div className="bg-terminal-dark p-2">
+            <div className="text-lg font-mono font-bold text-terminal-text">
+              {'\u2588'.repeat(difficulty)}<span className="text-terminal-border">{'\u2588'.repeat(5 - difficulty)}</span>
+            </div>
+            <div className="text-[9px] text-terminal-muted tracking-widest uppercase">
+              DIFFICULTY
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
