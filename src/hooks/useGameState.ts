@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import type { GameState, Stats } from '../lib/types';
 import { STARTING_BANKROLL, WRONG_GUESS_PENALTY, HINT_DEFINITIONS } from '../lib/scoring';
+import { submitGameResult } from '../lib/api';
+import { useAuthStore } from './useAuth';
 
 function getTodayKey(): string {
   const d = new Date();
@@ -40,6 +42,32 @@ function saveStats(stats: Stats) {
   try {
     localStorage.setItem('candle-stats', JSON.stringify(stats));
   } catch { /* ignore */ }
+}
+
+function getTodayDate(): string {
+  return new Date().toISOString().split('T')[0];
+}
+
+/** Fire-and-forget: sync game result to backend if user is logged in */
+function syncGameToBackend(puzzleId: string, won: boolean, score: number, guessCount: number, hintsUsed: number, difficulty?: number) {
+  const user = useAuthStore.getState().user;
+  if (!user) return;
+
+  submitGameResult({
+    puzzleId,
+    date: getTodayDate(),
+    won,
+    score,
+    guessCount,
+    hintsUsed,
+    difficulty,
+  }).then((backendStats) => {
+    // If backend returns stats, update local stats to stay in sync
+    if (backendStats) {
+      useGameStore.setState({ stats: backendStats });
+      saveStats(backendStats);
+    }
+  }).catch(() => { /* ignore — localStorage is the fallback */ });
 }
 
 interface GameStore {
@@ -153,6 +181,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       set({ state: newState, stats: newStats });
       saveDailyState(newState);
       saveStats(newStats);
+      syncGameToBackend(state.puzzleId, true, state.bankroll, newGuesses.length, state.revealedHints.length);
       return 'correct';
     }
 
@@ -176,6 +205,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       newStats.scoreDistribution[0]++;
       set({ state: newState, stats: newStats });
       saveStats(newStats);
+      syncGameToBackend(state.puzzleId, false, 0, newGuesses.length, state.revealedHints.length);
     } else {
       set({ state: newState });
     }

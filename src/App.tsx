@@ -15,16 +15,20 @@ import { GameOver } from './components/GameOver';
 import { ShareButton } from './components/ShareButton';
 import { StatsModal } from './components/StatsModal';
 import { HowToPlayModal } from './components/HowToPlayModal';
+import { useAuthStore } from './hooks/useAuth';
 
 function App() {
   const { puzzle, loading, error, loadPuzzleByTicker } = usePuzzle();
   const { state, stats, init, reset, buyHint, submitGuess } = useGameStore();
+  const authInit = useAuthStore((s) => s.init);
   const [showStats, setShowStats] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
   const [showAdmin, setShowAdmin] = useState(false);
   const [showMatrixRain, setShowMatrixRain] = useState(false);
   const handleIntroComplete = useCallback(() => setShowIntro(false), []);
+
+  useEffect(() => { authInit(); }, [authInit]);
 
   useEffect(() => {
     if (puzzle) {

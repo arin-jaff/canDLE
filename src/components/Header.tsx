@@ -1,3 +1,5 @@
+import { AuthButton } from './AuthButton';
+
 interface HeaderProps {
   onShowStats: () => void;
   onShowHelp: () => void;
@@ -18,6 +20,8 @@ export function Header({ onShowStats, onShowHelp, onShowAdmin }: HeaderProps) {
         </span>
       </div>
       <div className="flex items-center gap-1">
+        <AuthButton />
+        <div className="h-4 w-px bg-terminal-border mx-0.5" />
         <button
           onClick={onShowAdmin}
           className="w-8 h-8 flex items-center justify-center text-terminal-border hover:text-terminal-yellow text-xs border border-transparent hover:border-terminal-yellow/40 transition-colors rounded-sm"

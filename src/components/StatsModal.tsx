@@ -1,11 +1,29 @@
+import { useEffect, useState } from 'react';
 import type { Stats } from '../lib/types';
+import { useAuthStore } from '../hooks/useAuth';
+import { fetchStats } from '../lib/api';
 
 interface StatsModalProps {
   stats: Stats;
   onClose: () => void;
 }
 
-export function StatsModal({ stats, onClose }: StatsModalProps) {
+export function StatsModal({ stats: localStats, onClose }: StatsModalProps) {
+  const { user } = useAuthStore();
+  const [stats, setStats] = useState(localStats);
+  const [source, setSource] = useState<'local' | 'cloud'>('local');
+
+  // If logged in, fetch stats from backend
+  useEffect(() => {
+    if (!user) return;
+    fetchStats().then((backendStats) => {
+      if (backendStats && backendStats.gamesPlayed > 0) {
+        setStats(backendStats);
+        setSource('cloud');
+      }
+    });
+  }, [user]);
+
   const avgScore = stats.gamesPlayed > 0
     ? Math.round(stats.totalScore / stats.gamesPlayed)
     : 0;
@@ -25,7 +43,14 @@ export function StatsModal({ stats, onClose }: StatsModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-terminal-border px-4 py-3 bg-terminal-dark">
-          <span className="text-[11px] text-terminal-muted tracking-widest uppercase font-medium">STATISTICS</span>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] text-terminal-muted tracking-widest uppercase font-medium">STATISTICS</span>
+            {user && (
+              <span className="text-[8px] text-terminal-green tracking-wider uppercase">
+                {source === 'cloud' ? 'SYNCED' : 'LOCAL'}
+              </span>
+            )}
+          </div>
           <button
             onClick={onClose}
             className="text-terminal-muted hover:text-terminal-green text-sm"
@@ -86,6 +111,12 @@ export function StatsModal({ stats, onClose }: StatsModalProps) {
               {String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}
             </div>
           </div>
+
+          {!user && (
+            <div className="text-center text-[9px] text-terminal-muted tracking-wider uppercase">
+              SIGN IN TO SYNC STATS ACROSS DEVICES
+            </div>
+          )}
         </div>
       </div>
     </div>
