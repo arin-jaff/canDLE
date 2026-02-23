@@ -48823,10 +48823,12 @@
     "industry": "Software - Application",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "The company",
+    "description": "This company provides cloud-based software and services, primarily focused on customer relationship management (CRM). Their platform allows businesses to manage sales, marketing, service, and commerce, enabling them to build stronger customer relationships. Founded by Marc Benioff, it pioneered the software-as-a-service (SaaS) model and has become a dominant force in the enterprise software landscape.",
     "ipoYear": 2004,
     "high52w": 329.6,
-    "low52w": 185.73
+    "low52w": 185.73,
+    "funFact1": "Before becoming a tech giant, the company initially started as a consulting firm focused on database applications, demonstrating a surprising pivot from its current cloud-centric business model.",
+    "funFact2": "The company acquired Slack in 2020 for $**** billion, a significant move to integrate workplace communication into its broader platform and compete with Microsoft Teams."
   },
   "difficulty": 3
 }

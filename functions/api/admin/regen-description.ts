@@ -28,7 +28,12 @@ export const onRequestPost = async ({ request, env }: RequestContext) => {
       return Response.json({ error: `Puzzle file not found: ${filePath}` }, { status: 404 });
     }
 
-    const puzzle = JSON.parse(file.content);
+    let puzzle;
+    try {
+      puzzle = JSON.parse(file.content);
+    } catch (parseErr) {
+      return Response.json({ error: `Failed to parse puzzle JSON for ${sanitized}: ${parseErr instanceof Error ? parseErr.message : String(parseErr)}` }, { status: 500 });
+    }
     const name = puzzle.answer?.name || ticker.toUpperCase();
     const hints = puzzle.hints || {};
 

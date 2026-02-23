@@ -21,7 +21,10 @@ export async function getFile(repo: string, path: string, token: string): Promis
   });
   if (!res.ok) return null;
   const data = await res.json() as { sha: string; content: string };
-  const decoded = atob(data.content.replace(/\n/g, ''));
+  // Decode base64 properly (handles UTF-8 content)
+  const raw = atob(data.content.replace(/[\n\r]/g, ''));
+  const bytes = Uint8Array.from(raw, (c) => c.charCodeAt(0));
+  const decoded = new TextDecoder().decode(bytes);
   return { sha: data.sha, content: decoded };
 }
 
@@ -44,7 +47,8 @@ export async function commitFile(
     },
     body: JSON.stringify({
       message,
-      content: btoa(content),
+      // Encode UTF-8 content to base64 properly
+      content: btoa(String.fromCharCode(...new TextEncoder().encode(content))),
       sha,
       committer: { name: 'canDLE Bot', email: 'bot@candle.game' },
     }),
