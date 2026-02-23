@@ -85195,12 +85195,12 @@
     "industry": "Integrated Freight & Logistics",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This company is a leading provider of transportation and logistics services, primarily focused on intermodal, dedicated contract carriage, and final mile delivery. They move a wide range of goods across the United States and internationally, utilizing trucks, trains, and other modes of transport. Founded by J.B. ***** in 1961, the company has grown to become a significant player in the freight industry, known for its technology-driven solutions and commitment to safety.",
+    "description": "This company is a leading provider of transportation and logistics services, primarily focused on intermodal, dedicated contract carriage, and final mile delivery. They move a wide range of goods across the United States and internationally, utilizing trucks, trains, and other modes of transport. Founded by J.B. ***** in 1961, the company has grown to become a significant player in the freight transportation industry.",
     "ipoYear": 1983,
     "high52w": 234.82,
     "low52w": 121.45,
-    "funFact1": "J.B. ***** initially started his business with just one truck and $500 borrowed from his father-in-law, hauling produce from Southwest Arkansas to St. Louis. He famously drove that first truck himself for years, building relationships with customers and establishing a reputation for reliability.",
-    "funFact2": "The company's \"Train@******\" program uses real-time data and predictive analytics to optimize intermodal rail movements, improving efficiency and reducing transit times for shippers. This technology allows them to proactively manage potential delays and provide customers with greater visibility into their shipments."
+    "funFact1": "J.B. ***** initially started his business with just one truck and $500 borrowed from his father-in-law, hauling produce from Southwest Arkansas to St. Louis. He famously drove that first truck himself for years, building relationships with customers along the way.",
+    "funFact2": "The company's intermodal services utilize a network of rail partners, allowing them to offer more fuel-efficient and environmentally friendly transportation options compared to solely relying on trucking. They are a major consumer of rail capacity and work closely with railroads to optimize freight movement."
   },
   "difficulty": 4
 }
