@@ -25331,12 +25331,12 @@
     "industry": "Software - Infrastructure",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This company provides a leading cloud database service, allowing businesses to store and manage data flexibly and at scale. Their offerings include document, graph, time-series, and key-value databases, catering to a wide range of applications from mobile apps to enterprise analytics. Dev Ittner and Max ***** founded the company with the goal of building a more developer-friendly database.",
+    "description": "This company provides a leading cloud database service, allowing businesses to store and manage data flexibly and at scale. Their offerings include document, graph, time-series, and key-value databases, catering to a wide range of applications from mobile apps to enterprise analytics. Dev Ittner and Max Schwartz founded the company in 2007, aiming to solve the challenges of traditional relational databases.",
     "ipoYear": 2017,
     "high52w": 444.72,
     "low52w": 140.78,
-    "funFact1": "Initially, the company was bootstrapped and operated out of a small apartment in New York City for several years before securing significant funding.",
-    "funFact2": "The company's name is derived from the concept of \"candle,\" representing the idea of illuminating data and providing insights."
+    "funFact1": "Initially, the company was bootstrapped and operated out of a small office above a pizza shop in New York City, relying heavily on open-source contributions before securing significant funding.",
+    "funFact2": "The company's name is derived from the concept of \"monastic\" data storage, reflecting the idea of a secure and reliable repository for information, and the founders wanted a name that was memorable and easy to pronounce."
   },
   "difficulty": 4
 }
