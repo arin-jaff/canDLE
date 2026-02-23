@@ -80,7 +80,34 @@ def prune_old_dates(schedule, keep_days_back=7):
     return {k: v for k, v in schedule.items() if k >= cutoff}
 
 
+def generate_specific_ticker(ticker):
+    """Generate puzzle for a specific ticker (triggered via workflow_dispatch)."""
+    os.makedirs(PUZZLES_DIR, exist_ok=True)
+    ticker = ticker.strip().upper()
+    print(f"Generating specific ticker: {ticker}")
+
+    try:
+        puzzle = generate_from_ticker(ticker)
+        if not puzzle.get("charts", {}).get("1m"):
+            raise ValueError(f"No 1m chart data for {ticker}")
+
+        puzzle_path = os.path.join(PUZZLES_DIR, f"{ticker.lower()}.json")
+        save_json(puzzle_path, puzzle)
+        print(f"Saved {puzzle_path}")
+        print("Done! (puzzle generated, not added to schedule)")
+
+    except Exception as e:
+        print(f"ERROR generating {ticker}: {e}")
+        sys.exit(1)
+
+
 def main():
+    # Check if a specific ticker was requested
+    specific_ticker = os.environ.get("GENERATE_TICKER", "").strip()
+    if specific_ticker:
+        generate_specific_ticker(specific_ticker)
+        return
+
     os.makedirs(PUZZLES_DIR, exist_ok=True)
 
     # 1. Load data

@@ -95,21 +95,41 @@ export function ScheduleEditor({ onPreviewPuzzle }: ScheduleEditorProps) {
     saveSchedule(newSched);
   };
 
+  const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
   const handleGenerateAndSet = async (date: string, ticker: string) => {
     const t = ticker.trim().toUpperCase();
     if (!t) return;
     setGenerating(date);
     setStatus(`GENERATING ${t}...`);
     try {
-      const res = await fetch(`/api/admin/generate?ticker=${t}`);
+      let res: Response;
+      if (isDev) {
+        res = await fetch(`/api/admin/generate?ticker=${t}`);
+      } else {
+        res = await fetch('/api/admin/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ticker: t }),
+        });
+      }
+
+      const text = await res.text();
+      let data;
+      try { data = JSON.parse(text); } catch { data = null; }
+
       if (res.ok) {
         handleSetTicker(date, t);
-        const puzzlesRes = await fetch('/api/admin/puzzles');
-        if (puzzlesRes.ok) setAvailable(await puzzlesRes.json());
-        setStatus(`${t} READY`);
-        setTimeout(() => setStatus(''), 2000);
+        if (isDev) {
+          const puzzlesRes = await fetch('/api/admin/puzzles');
+          if (puzzlesRes.ok) setAvailable(await puzzlesRes.json());
+          setStatus(`${t} READY`);
+        } else {
+          setStatus(`${t} QUEUED — DEPLOYING IN ~2-3 MIN`);
+        }
+        setTimeout(() => setStatus(''), 5000);
       } else {
-        setStatus(`ERR: FAILED TO GENERATE ${t}`);
+        setStatus(`ERR: ${data?.error || 'FAILED TO GENERATE ' + t}`);
       }
     } catch {
       setStatus('ERR: NETWORK');
