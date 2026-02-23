@@ -5,6 +5,7 @@ import { execSync, exec } from 'child_process'
 import { readFileSync, writeFileSync, readdirSync } from 'fs'
 import { join } from 'path'
 import type { Plugin } from 'vite'
+import type { IncomingMessage, ServerResponse } from 'http'
 
 const PYTHON = '/Library/Frameworks/Python.framework/Versions/3.12/bin/python3'
 
@@ -12,45 +13,43 @@ const PYTHON = '/Library/Frameworks/Python.framework/Versions/3.12/bin/python3'
 const env = loadEnv('development', process.cwd(), '')
 const GEMINI_API_KEY = env.GEMINI_API_KEY || ''
 
+/** Send a JSON response */
+function json(res: ServerResponse, status: number, data: unknown) {
+  res.writeHead(status, { 'Content-Type': 'application/json' })
+  res.end(JSON.stringify(data))
+}
+
+/** Read the full request body */
+function readBody(req: IncomingMessage): Promise<string> {
+  return new Promise((resolve) => {
+    let body = ''
+    req.on('data', (chunk: Buffer) => { body += chunk.toString() })
+    req.on('end', () => resolve(body))
+  })
+}
+
 function adminApiPlugin(): Plugin {
   return {
     name: 'admin-api',
     configureServer(server) {
-      // Parse JSON body helper
-      const readBody = (req: import('http').IncomingMessage): Promise<string> =>
-        new Promise((resolve) => {
-          let body = ''
-          req.on('data', (chunk: Buffer) => { body += chunk.toString() })
-          req.on('end', () => resolve(body))
-        })
-
-      server.middlewares.use(async (req, res, next) => {
+      // Use a NON-async middleware. For endpoints that need async work,
+      // handle the promise chain internally without returning a promise
+      // to Connect (which ignores it and falls through to Vite's SPA handler).
+      server.middlewares.use((req, res, next) => {
         const url = new URL(req.url || '', 'http://localhost')
 
         // Generate puzzle for a ticker
         if (url.pathname === '/api/admin/generate' && req.method === 'GET') {
           const ticker = url.searchParams.get('ticker')
-          if (!ticker) {
-            res.writeHead(400, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ error: 'Missing ticker param' }))
-            return
-          }
+          if (!ticker) { json(res, 400, { error: 'Missing ticker param' }); return }
           try {
             const result = execSync(
               `${PYTHON} scripts/generate_puzzles.py ${ticker.replace(/[^a-zA-Z0-9.]/g, '')}`,
-              {
-                cwd: process.cwd(),
-                timeout: 45000,
-                encoding: 'utf-8',
-                env: { ...process.env, GEMINI_API_KEY },
-              }
+              { cwd: process.cwd(), timeout: 45000, encoding: 'utf-8', env: { ...process.env, GEMINI_API_KEY } }
             )
-            res.writeHead(200, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ ok: true, ticker, output: result }))
+            json(res, 200, { ok: true, ticker, output: result })
           } catch (e: unknown) {
-            const msg = e instanceof Error ? e.message : String(e)
-            res.writeHead(500, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ error: msg }))
+            json(res, 500, { error: e instanceof Error ? e.message : String(e) })
           }
           return
         }
@@ -62,28 +61,20 @@ function adminApiPlugin(): Plugin {
             res.writeHead(200, { 'Content-Type': 'application/json' })
             res.end(data)
           } catch {
-            res.writeHead(200, { 'Content-Type': 'application/json' })
-            res.end('{}')
+            json(res, 200, {})
           }
           return
         }
 
-        // Save schedule
+        // Save schedule (async — body read)
         if (url.pathname === '/api/admin/schedule' && req.method === 'POST') {
-          try {
-            const body = await readBody(req)
+          readBody(req).then((body) => {
             const schedule = JSON.parse(body)
-            writeFileSync(
-              join(process.cwd(), 'public/schedule.json'),
-              JSON.stringify(schedule, null, 2)
-            )
-            res.writeHead(200, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ ok: true }))
-          } catch (e: unknown) {
-            const msg = e instanceof Error ? e.message : String(e)
-            res.writeHead(500, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ error: msg }))
-          }
+            writeFileSync(join(process.cwd(), 'public/schedule.json'), JSON.stringify(schedule, null, 2))
+            json(res, 200, { ok: true })
+          }).catch((e: unknown) => {
+            json(res, 500, { error: e instanceof Error ? e.message : String(e) })
+          })
           return
         }
 
@@ -108,59 +99,38 @@ function adminApiPlugin(): Plugin {
                 return { file: f, ticker: f.replace('.json', '').toUpperCase(), name: '', description: '', funFact1: '', funFact2: '', difficulty: null }
               }
             })
-            res.writeHead(200, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify(tickers))
+            json(res, 200, tickers)
           } catch (e: unknown) {
-            const msg = e instanceof Error ? e.message : String(e)
-            res.writeHead(500, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ error: msg }))
+            json(res, 500, { error: e instanceof Error ? e.message : String(e) })
           }
           return
         }
 
-        // Regenerate description for a ticker
+        // Regenerate description for a ticker (async — exec)
         if (url.pathname === '/api/admin/regen-description' && req.method === 'GET') {
           const ticker = url.searchParams.get('ticker')
-          if (!ticker) {
-            res.writeHead(400, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ error: 'Missing ticker param' }))
-            return
-          }
+          if (!ticker) { json(res, 400, { error: 'Missing ticker param' }); return }
           const sanitized = ticker.replace(/[^a-zA-Z0-9.]/g, '')
-          try {
-            const output = await new Promise<string>((resolve, reject) => {
-              exec(
-                `${PYTHON} scripts/regen_description.py ${sanitized}`,
-                {
-                  cwd: process.cwd(),
-                  timeout: 120000,
-                  encoding: 'utf-8',
-                  env: { ...process.env, GEMINI_API_KEY },
-                },
-                (err, stdout, stderr) => {
-                  if (err) reject(new Error(stderr || err.message))
-                  else resolve(stdout)
-                }
-              )
-            })
-            res.writeHead(200, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ ok: true, ticker: sanitized, output }))
-          } catch (e: unknown) {
-            const msg = e instanceof Error ? e.message : String(e)
-            res.writeHead(500, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ error: msg }))
-          }
+          exec(
+            `${PYTHON} scripts/regen_description.py ${sanitized}`,
+            { cwd: process.cwd(), timeout: 120000, encoding: 'utf-8', env: { ...process.env, GEMINI_API_KEY } },
+            (err, stdout, stderr) => {
+              if (err) {
+                json(res, 500, { error: stderr || err.message })
+              } else {
+                json(res, 200, { ok: true, ticker: sanitized, output: stdout })
+              }
+            }
+          )
           return
         }
 
-        // Save manually edited description for a ticker
+        // Save manually edited description for a ticker (async — body read)
         if (url.pathname === '/api/admin/save-description' && req.method === 'POST') {
-          try {
-            const body = await readBody(req)
+          readBody(req).then((body) => {
             const { ticker, description } = JSON.parse(body)
             if (!ticker || typeof description !== 'string') {
-              res.writeHead(400, { 'Content-Type': 'application/json' })
-              res.end(JSON.stringify({ error: 'Missing ticker or description' }))
+              json(res, 400, { error: 'Missing ticker or description' })
               return
             }
             const sanitized = ticker.replace(/[^a-zA-Z0-9.]/g, '').toLowerCase()
@@ -168,13 +138,10 @@ function adminApiPlugin(): Plugin {
             const puzzle = JSON.parse(readFileSync(filePath, 'utf-8'))
             puzzle.hints.description = description
             writeFileSync(filePath, JSON.stringify(puzzle, null, 2))
-            res.writeHead(200, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ ok: true }))
-          } catch (e: unknown) {
-            const msg = e instanceof Error ? e.message : String(e)
-            res.writeHead(500, { 'Content-Type': 'application/json' })
-            res.end(JSON.stringify({ error: msg }))
-          }
+            json(res, 200, { ok: true })
+          }).catch((e: unknown) => {
+            json(res, 500, { error: e instanceof Error ? e.message : String(e) })
+          })
           return
         }
 
