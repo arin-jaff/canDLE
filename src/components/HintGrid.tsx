@@ -13,7 +13,7 @@ interface HintGridProps {
 
 const CATEGORIES: { key: string; label: string; ids: string[] }[] = [
   { key: 'all', label: 'ALL', ids: [] },
-  { key: 'technical', label: 'TECHNICAL', ids: ['1y', '5y', '10y', 'high52w', 'priceAxis'] },
+  { key: 'technical', label: 'TECHNICAL', ids: ['5y', '10y', 'high52w'] },
   { key: 'fundamental', label: 'FUNDAMENTAL', ids: ['sector', 'industry', 'marketCapRange', 'ipoYear'] },
   { key: 'company', label: 'COMPANY', ids: ['hqCountry', 'description'] },
 ];

@@ -14,8 +14,16 @@ import { GuessList } from './components/GuessList';
 import { GameOver } from './components/GameOver';
 import { ShareButton } from './components/ShareButton';
 import { StatsModal } from './components/StatsModal';
-import { HowToPlayModal } from './components/HowToPlayModal';
+import { OnboardingGuide } from './components/OnboardingGuide';
 import { useAuthStore } from './hooks/useAuth';
+
+function hasSeenOnboarding(): boolean {
+  try { return localStorage.getItem('candle-onboarded') === '1'; } catch { return false; }
+}
+
+function markOnboarded() {
+  try { localStorage.setItem('candle-onboarded', '1'); } catch { /* */ }
+}
 
 function App() {
   const { puzzle, loading, error, loadPuzzleByTicker } = usePuzzle();
@@ -26,6 +34,7 @@ function App() {
   const [showIntro, setShowIntro] = useState(true);
   const [showAdmin, setShowAdmin] = useState(false);
   const [showMatrixRain, setShowMatrixRain] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(!hasSeenOnboarding());
   const handleIntroComplete = useCallback(() => setShowIntro(false), []);
 
   useEffect(() => { authInit(); }, [authInit]);
@@ -73,7 +82,7 @@ function App() {
 
   const gameOver = state.won || state.lost;
   const activeChartData = puzzle.charts[state.activeChart];
-  const showPriceAxis = gameOver || state.revealedHints.includes('priceAxis');
+  const showPriceAxis = true;
   const puzzleNumber = getPuzzleNumber();
 
   const handleBuyHint = (hintId: string) => {
@@ -174,10 +183,15 @@ function App() {
           {/* Right Panel — Hints + Guess */}
           <div className="lg:w-[420px] xl:w-[480px] p-4 lg:p-5 space-y-3 lg:overflow-y-auto border-t lg:border-t-0 border-terminal-border">
             <div>
-              <div className="flex items-center gap-2 mb-2 px-1">
-                <div className="w-1 h-3 bg-terminal-muted rounded-sm" />
-                <span className="text-[11px] text-terminal-muted tracking-widest uppercase font-medium">
-                  DATA & ANALYTICS
+              <div className="flex items-center justify-between mb-2 px-1">
+                <div className="flex items-center gap-2">
+                  <div className="w-1 h-3 bg-terminal-muted rounded-sm" />
+                  <span className="text-[11px] text-terminal-muted tracking-widest uppercase font-medium">
+                    DATA & ANALYTICS
+                  </span>
+                </div>
+                <span className="text-[8px] text-terminal-border tracking-wider">
+                  CLICK TO REVEAL
                 </span>
               </div>
               <HintGrid
@@ -218,11 +232,14 @@ function App() {
       </footer>
 
       {/* Modals */}
+      {showOnboarding && (
+        <OnboardingGuide onComplete={() => { setShowOnboarding(false); markOnboarded(); }} />
+      )}
       {showStats && (
         <StatsModal stats={stats} onClose={() => setShowStats(false)} />
       )}
       {showHelp && (
-        <HowToPlayModal onClose={() => setShowHelp(false)} />
+        <OnboardingGuide onComplete={() => setShowHelp(false)} />
       )}
       {showAdmin && (
         <AdminPanel

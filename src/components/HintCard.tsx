@@ -24,13 +24,28 @@ function formatHintValue(hint: HintDef, puzzle: PuzzleData): string {
     case '1y': return 'Chart unlocked';
     case '5y': return 'Chart unlocked';
     case '10y': return 'Chart unlocked';
-    case 'priceAxis': return 'Price axis revealed';
+    default: return '';
+  }
+}
+
+function getHintDescription(id: string): string {
+  switch (id) {
+    case 'hqCountry': return 'Country where the company is headquartered';
+    case 'ipoYear': return 'Year the stock first went public';
+    case 'sector': return 'Broad market sector (e.g. Technology, Healthcare)';
+    case 'marketCapRange': return 'Market capitalization size range';
+    case 'industry': return 'Specific industry within the sector';
+    case 'high52w': return '52-week high and low stock prices';
+    case 'description': return 'AI-generated company description with key names redacted';
+    case '5y': return 'Unlock the 5-year price chart';
+    case '10y': return 'Unlock the all-time price chart';
     default: return '';
   }
 }
 
 export function HintCard({ hint, revealed, puzzle, bankroll, disabled, onBuy }: HintCardProps) {
   const canAfford = bankroll >= hint.cost;
+  const desc = getHintDescription(hint.id);
 
   if (revealed) {
     return (
@@ -61,13 +76,20 @@ export function HintCard({ hint, revealed, puzzle, bankroll, disabled, onBuy }: 
         }
       `}
     >
-      <span className="text-[10px] text-terminal-muted uppercase tracking-wider w-24 shrink-0">
-        {hint.label}
-      </span>
-      <span className="flex-1 text-xs text-terminal-border font-mono">
-        {'\u2500'.repeat(6)}
-      </span>
-      <span className="text-[11px] text-terminal-red font-mono w-20 text-right">
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] text-terminal-muted uppercase tracking-wider w-24 shrink-0">
+            {hint.label}
+          </span>
+          <span className="flex-1 text-xs text-terminal-border font-mono">
+            {'\u2500'.repeat(6)}
+          </span>
+        </div>
+        {desc && (
+          <div className="text-[9px] text-terminal-border mt-0.5 pl-[104px]">{desc}</div>
+        )}
+      </div>
+      <span className="text-[11px] text-terminal-red font-mono w-16 text-right shrink-0">
         -{hint.cost}
       </span>
     </button>

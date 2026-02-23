@@ -14,7 +14,7 @@ export function ChartTabs() {
   const { activeChart, revealedHints } = state;
 
   const gameOver = state.won || state.lost;
-  const isUnlocked = (key: Timeframe) => gameOver || key === '1m' || revealedHints.includes(key);
+  const isUnlocked = (key: Timeframe) => gameOver || key === '1m' || key === '1y' || revealedHints.includes(key);
 
   return (
     <div className="flex gap-0 border border-terminal-border border-t-0 bg-terminal-dark">
