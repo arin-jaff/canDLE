@@ -19,9 +19,36 @@ export function TickerStatus() {
 
   const fetchPuzzles = async () => {
     try {
+      // Try dev API first
       const res = await fetch('/api/admin/puzzles');
-      const data = await res.json();
-      setPuzzles(data);
+      if (res.ok) {
+        setPuzzles(await res.json());
+        return;
+      }
+    } catch { /* dev API not available */ }
+
+    // Fallback: read schedule and load each puzzle JSON
+    try {
+      const schedRes = await fetch('/schedule.json');
+      if (!schedRes.ok) return;
+      const schedule: Record<string, string> = await schedRes.json();
+      const tickers = [...new Set(Object.values(schedule))];
+      const results: PuzzleInfo[] = [];
+      for (const ticker of tickers) {
+        try {
+          const pRes = await fetch(`/puzzles/${ticker.toLowerCase()}.json`);
+          if (!pRes.ok) continue;
+          const puzzle = await pRes.json();
+          results.push({
+            file: `${ticker.toLowerCase()}.json`,
+            ticker: ticker.toUpperCase(),
+            name: puzzle.answer?.name || ticker,
+            description: puzzle.hints?.description || '',
+            difficulty: puzzle.difficulty ?? null,
+          });
+        } catch { /* skip */ }
+      }
+      setPuzzles(results);
     } catch (e) {
       console.error('Failed to fetch puzzles:', e);
     } finally {

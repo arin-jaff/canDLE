@@ -38,12 +38,25 @@ export function ScheduleEditor({ onPreviewPuzzle }: ScheduleEditorProps) {
 
   const loadData = useCallback(async () => {
     try {
-      const [schedRes, puzzlesRes] = await Promise.all([
-        fetch('/api/admin/schedule'),
-        fetch('/api/admin/puzzles'),
-      ]);
-      if (schedRes.ok) setSchedule(await schedRes.json());
-      if (puzzlesRes.ok) setAvailable(await puzzlesRes.json());
+      // Try dev API first, fall back to static files for production
+      let schedData: Record<string, string> = {};
+      let puzzlesData: PuzzleInfo[] = [];
+
+      const schedRes = await fetch('/schedule.json');
+      if (schedRes.ok) schedData = await schedRes.json();
+
+      // Try admin API (dev only), fall back to scanning known puzzles
+      try {
+        const puzzlesRes = await fetch('/api/admin/puzzles');
+        if (puzzlesRes.ok) puzzlesData = await puzzlesRes.json();
+      } catch {
+        // In production, build available list from schedule tickers
+        const tickers = [...new Set(Object.values(schedData))];
+        puzzlesData = tickers.map(t => ({ file: `${t.toLowerCase()}.json`, ticker: t, name: t }));
+      }
+
+      setSchedule(schedData);
+      setAvailable(puzzlesData);
     } catch {
       setStatus('ERR: FAILED TO LOAD');
     }
