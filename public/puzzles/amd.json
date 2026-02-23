@@ -91705,12 +91705,12 @@
     "industry": "Semiconductors",
     "marketCapRange": "Mega Cap (>$200B)",
     "hqCountry": "United States",
-    "description": "This company designs and manufactures semiconductors, including central processing units (CPUs) for computers and graphics processing units (GPUs) for gaming and data centers. They are a major competitor in the chip market, challenging the dominance of Intel and Nvidia, and are known for their Ryzen line of CPUs and Radeon GPUs. Lisa Su is the current CEO, leading the company through a period of significant growth and innovation.",
+    "description": "This company designs and manufactures semiconductors, including central processing units (CPUs) for computers and graphics processing units (GPUs) for gaming and data centers. They compete directly with Intel and NVIDIA, and are known for their Ryzen line of CPUs and Radeon line of GPUs, which have gained significant market share. Lisa Su is the current CEO, leading a resurgence in the company's performance and innovation.",
     "ipoYear": 1980,
     "high52w": 267.08,
     "low52w": 76.48,
-    "funFact1": "Initially founded in 1969 as ******** Semiconductor Products, the company underwent several name changes and mergers before settling on its current name in 2006. It was originally spun off from ******** Corporation.",
-    "funFact2": "In 2020, ***** achieved a market capitalization higher than Intel for the first time in nearly 30 years, demonstrating a significant shift in the semiconductor landscape and reflecting investor confidence in their products and strategy."
+    "funFact1": "Initially founded in 1969 as ********, the company underwent a significant transformation in 2006 when it spun off its manufacturing operations into a separate entity called GlobalFoundries, allowing it to focus solely on chip design.",
+    "funFact2": "In 2020, ***** achieved a market capitalization briefly surpassing Intel, a remarkable turnaround for a company that had struggled for years and was once considered a distant third in the CPU market."
   },
   "difficulty": 3
 }
