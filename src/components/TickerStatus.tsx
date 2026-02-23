@@ -5,6 +5,8 @@ interface PuzzleInfo {
   ticker: string;
   name: string;
   description: string;
+  funFact1: string;
+  funFact2: string;
   difficulty: number | null;
 }
 
@@ -23,6 +25,7 @@ export function TickerStatus() {
       const res = await fetch('/api/admin/puzzles');
       if (res.ok) {
         setPuzzles(await res.json());
+        setLoading(false);
         return;
       }
     } catch { /* dev API not available */ }
@@ -44,6 +47,8 @@ export function TickerStatus() {
             ticker: ticker.toUpperCase(),
             name: puzzle.answer?.name || ticker,
             description: puzzle.hints?.description || '',
+            funFact1: puzzle.hints?.funFact1 || '',
+            funFact2: puzzle.hints?.funFact2 || '',
             difficulty: puzzle.difficulty ?? null,
           });
         } catch { /* skip */ }
@@ -61,8 +66,15 @@ export function TickerStatus() {
   const regenDescription = async (ticker: string) => {
     setRegenning((prev) => new Set(prev).add(ticker));
     try {
-      const res = await fetch(`/api/admin/regen-description?ticker=${ticker}`);
-      const data = await res.json();
+      const res = await fetch(`/api/admin/regen-description?ticker=${encodeURIComponent(ticker)}`);
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        alert(`Server returned invalid response: ${text.slice(0, 200)}`);
+        return;
+      }
       if (data.error) {
         alert(`Error: ${data.error}`);
       } else {
@@ -212,8 +224,20 @@ export function TickerStatus() {
                 </div>
               </div>
             ) : (
-              <div className="text-[10px] text-terminal-text leading-relaxed">
-                {p.description || <span className="text-terminal-muted italic">No description</span>}
+              <div className="space-y-1">
+                <div className="text-[10px] text-terminal-text leading-relaxed">
+                  {p.description || <span className="text-terminal-muted italic">No description</span>}
+                </div>
+                {p.funFact1 && (
+                  <div className="text-[9px] text-terminal-muted leading-relaxed">
+                    <span className="text-terminal-yellow">FUN FACT 1:</span> {p.funFact1}
+                  </div>
+                )}
+                {p.funFact2 && (
+                  <div className="text-[9px] text-terminal-muted leading-relaxed">
+                    <span className="text-terminal-yellow">FUN FACT 2:</span> {p.funFact2}
+                  </div>
+                )}
               </div>
             )}
           </div>

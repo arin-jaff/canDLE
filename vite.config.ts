@@ -100,10 +100,12 @@ function adminApiPlugin(): Plugin {
                   ticker: data.answer?.ticker || f.replace('.json', '').toUpperCase(),
                   name: data.answer?.name || '',
                   description: data.hints?.description || '',
+                  funFact1: data.hints?.funFact1 || '',
+                  funFact2: data.hints?.funFact2 || '',
                   difficulty: data.difficulty ?? null,
                 }
               } catch {
-                return { file: f, ticker: f.replace('.json', '').toUpperCase(), name: '', description: '', difficulty: null }
+                return { file: f, ticker: f.replace('.json', '').toUpperCase(), name: '', description: '', funFact1: '', funFact2: '', difficulty: null }
               }
             })
             res.writeHead(200, { 'Content-Type': 'application/json' })
