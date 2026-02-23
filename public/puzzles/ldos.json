@@ -44763,12 +44763,12 @@
     "industry": "Information Technology Services",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This company provides solutions in defense, intelligence, civil, and health markets. They offer a wide range of services including engineering, information technology, cybersecurity, and mission support. Notably, they were formed in 2013 through the spin-off of ***** from SAIC and have since grown significantly through acquisitions.",
+    "description": "This company is a prominent provider of systems engineering, information technology, and cybersecurity solutions to the U.S. government and commercial clients. They specialize in areas like defense, intelligence, civil, and health sectors, offering services ranging from digital modernization and data analytics to aviation and nuclear operations support. Notably, they were formed in 2013 through the spin-off of ***** from SAIC, and are led by CEO Roger Krone.",
     "ipoYear": 2006,
     "high52w": 205.3,
     "low52w": 122.37,
-    "funFact1": "Roger Krone, the current CEO, previously served as the President of ***** for over a decade, bringing extensive experience in aerospace and defense to the role.",
-    "funFact2": "The company’s name, *****, is derived from the Greek word \"leitos,\" meaning \"guide\" or \"leader,\" reflecting their commitment to guiding clients through complex challenges."
+    "funFact1": "In 2015, ***** acquired MicroKnowledge, a leader in enterprise information archiving, to bolster its compliance and data management capabilities. This acquisition significantly expanded their offerings in the rapidly growing e-discovery and information governance market.",
+    "funFact2": "The company’s name is derived from the Greek word \"leitos,\" meaning \"guide\" or \"leader,\" reflecting their commitment to guiding clients through complex challenges and providing innovative solutions."
   },
   "difficulty": 4
 }
