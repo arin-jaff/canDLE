@@ -10,22 +10,27 @@ interface FileInfo {
   content: string;
 }
 
+const headers = (token: string) => ({
+  Authorization: `Bearer ${token}`,
+  Accept: 'application/vnd.github.v3+json',
+  'User-Agent': 'canDLE-admin',
+});
+
 /** Get a file's current content and SHA from the repo */
 export async function getFile(repo: string, path: string, token: string): Promise<FileInfo | null> {
-  const res = await fetch(`${API}/repos/${repo}/contents/${path}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github.v3+json',
-      'User-Agent': 'canDLE-admin',
-    },
+  // Get SHA from the contents API
+  const metaRes = await fetch(`${API}/repos/${repo}/contents/${path}`, {
+    headers: headers(token),
   });
-  if (!res.ok) return null;
-  const data = await res.json() as { sha: string; content: string };
-  // Decode base64 properly (handles UTF-8 content)
-  const raw = atob(data.content.replace(/[\n\r]/g, ''));
-  const bytes = Uint8Array.from(raw, (c) => c.charCodeAt(0));
-  const decoded = new TextDecoder().decode(bytes);
-  return { sha: data.sha, content: decoded };
+  if (!metaRes.ok) return null;
+  const meta = await metaRes.json() as { sha: string; download_url: string };
+
+  // Get raw content via download_url (avoids base64 decoding issues)
+  const rawRes = await fetch(meta.download_url);
+  if (!rawRes.ok) return null;
+  const content = await rawRes.text();
+
+  return { sha: meta.sha, content };
 }
 
 /** Commit an updated file to the repo */
@@ -37,18 +42,20 @@ export async function commitFile(
   message: string,
   token: string,
 ): Promise<boolean> {
+  // Encode content to base64 via ArrayBuffer (handles UTF-8)
+  const encoded = new TextEncoder().encode(content);
+  const binStr = Array.from(encoded, (b) => String.fromCharCode(b)).join('');
+  const b64 = btoa(binStr);
+
   const res = await fetch(`${API}/repos/${repo}/contents/${path}`, {
     method: 'PUT',
     headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/vnd.github.v3+json',
-      'User-Agent': 'canDLE-admin',
+      ...headers(token),
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       message,
-      // Encode UTF-8 content to base64 properly
-      content: btoa(String.fromCharCode(...new TextEncoder().encode(content))),
+      content: b64,
       sha,
       committer: { name: 'canDLE Bot', email: 'bot@candle.game' },
     }),
