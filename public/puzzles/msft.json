@@ -81104,8 +81104,8 @@
     "ipoYear": 1986,
     "high52w": 553.5,
     "low52w": 342.95,
-    "funFact1": "Before becoming a software powerhouse, the company initially focused on developing and selling traffic analysis software for Altair 8800 computers, a very early personal computer. This early venture helped them hone their programming skills and establish a foundation for future success.",
-    "funFact2": "The company's first official product, a version of the BASIC programming language, was given away free with the purchase of an Altair 8800, a move that significantly boosted its early visibility and adoption among hobbyists and developers."
+    "funFact1": "Before becoming a software powerhouse, the company's first product was a traffic management system called Traf-O-Data, which used IBM mainframes to analyze traffic patterns. This early venture, though unsuccessful, demonstrated their initial programming skills.",
+    "funFact2": "The company once held the Guinness World Record for the largest software company by revenue for several consecutive years, consistently generating hundreds of billions of dollars annually."
   },
   "difficulty": 1
 }
