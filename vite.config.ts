@@ -127,26 +127,29 @@ function adminApiPlugin(): Plugin {
             return
           }
           const sanitized = ticker.replace(/[^a-zA-Z0-9.]/g, '')
-          const child = exec(
-            `${PYTHON} scripts/regen_description.py ${sanitized}`,
-            {
-              cwd: process.cwd(),
-              timeout: 120000,
-              encoding: 'utf-8',
-              env: { ...process.env, GEMINI_API_KEY },
-            },
-            (err, stdout, stderr) => {
-              if (err) {
-                const msg = stderr || err.message
-                res.writeHead(500, { 'Content-Type': 'application/json' })
-                res.end(JSON.stringify({ error: msg }))
-              } else {
-                res.writeHead(200, { 'Content-Type': 'application/json' })
-                res.end(JSON.stringify({ ok: true, ticker: sanitized, output: stdout }))
-              }
-            }
-          )
-          void child
+          try {
+            const output = await new Promise<string>((resolve, reject) => {
+              exec(
+                `${PYTHON} scripts/regen_description.py ${sanitized}`,
+                {
+                  cwd: process.cwd(),
+                  timeout: 120000,
+                  encoding: 'utf-8',
+                  env: { ...process.env, GEMINI_API_KEY },
+                },
+                (err, stdout, stderr) => {
+                  if (err) reject(new Error(stderr || err.message))
+                  else resolve(stdout)
+                }
+              )
+            })
+            res.writeHead(200, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ ok: true, ticker: sanitized, output }))
+          } catch (e: unknown) {
+            const msg = e instanceof Error ? e.message : String(e)
+            res.writeHead(500, { 'Content-Type': 'application/json' })
+            res.end(JSON.stringify({ error: msg }))
+          }
           return
         }
 
