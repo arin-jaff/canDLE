@@ -70145,10 +70145,12 @@
     "industry": "Medical Devices",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This medical technology company, led by CEO Mike Farrell, develops, manufactures, and markets a wide range of innovative devices used in interventional medical specialties. Their products address conditions in areas such as cardiovascular, endoscopy, and urology, including devices for treating blocked arteries and performing minimally invasive surgical procedures. The company has a significant global presence and is known for its advancements in areas like cardiac rhythm management and structural heart repair.",
+    "description": "This medical device manufacturer focuses on minimally invasive solutions for a range of conditions. They develop, manufacture, and market a broad portfolio of devices used in cardiology, endoscopy, urology, and neuromodulation. Founded by Peter Foley and Joseph Nitardy, the company is notable for its pioneering work in endoscopies and its significant presence in the interventional cardiology market.",
     "ipoYear": 1992,
     "high52w": 109.5,
-    "low52w": 74.08
+    "low52w": 74.08,
+    "funFact1": "In 1989, Peter Foley, a gastroenterologist, performed the first-ever endoscopic ultrasound procedure using a prototype device he developed, leading to the company's early focus on advanced endoscopy technologies.",
+    "funFact2": "The company acquired ***** in 2016, significantly expanding its presence in the neuromodulation space and adding a new therapeutic area focused on treating chronic pain and movement disorders."
   },
   "difficulty": 4
 }

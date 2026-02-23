@@ -91705,10 +91705,12 @@
     "industry": "Semiconductors",
     "marketCapRange": "Mega Cap (>$200B)",
     "hqCountry": "United States",
-    "description": "This company, led by CEO Lisa Su, designs and manufactures semiconductors, including CPUs and GPUs used in everything from gaming PCs to data centers. Their products compete directly with those of a major California-based tech giant, and they've gained significant market share in recent years thanks to advancements in their ******* architecture. They are a key player in the ongoing shift towards high-performance computing and artificial intelligence, with a focus on both consumer and enterprise markets, trading under the symbol ***.",
+    "description": "This company designs and manufactures semiconductors, including central processing units (CPUs) for computers and graphics processing units (GPUs) for gaming and data centers. They are a major competitor in the chip market, challenging the dominance of Intel and Nvidia, and are known for their Ryzen line of CPUs and Radeon GPUs. Lisa Su is the current CEO, leading the company through a period of significant growth and innovation.",
     "ipoYear": 1980,
     "high52w": 267.08,
-    "low52w": 76.48
+    "low52w": 76.48,
+    "funFact1": "Initially founded in 1969 as ******** Semiconductor Products, the company underwent several name changes and mergers before settling on its current name in 2006. It was originally spun off from ******** Corporation.",
+    "funFact2": "In 2020, ***** achieved a market capitalization briefly surpassing that of Intel, a significant milestone demonstrating its growing influence in the semiconductor industry despite Intel's decades-long leadership."
   },
   "difficulty": 3
 }

@@ -16175,10 +16175,12 @@
     "industry": "Utilities - Independent Power Producers",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This utility company, led by CEO Joseph Dominguez, is a major player in the U.S. energy sector, providing electricity, natural gas, and *** ***** services to customers in the Mid-Atlantic region. They are increasingly focused on renewable energy sources, particularly nuclear power and solar, and recently acquired a significant portion of Duke Energy\u2019s assets in Maryland, expanding their reach and influence. The company\u2019s commitment to clean energy and infrastructure modernization makes it a notable force in the transition to a sustainable future, and its stock is often viewed as a stable investment within the ******** industry.",
+    "description": "This company is a leading producer of clean energy, primarily focusing on nuclear and renewable energy sources. They operate the largest fleet of nuclear power plants in the United States, providing electricity to millions of homes and businesses. CEO Christopher ***** has been instrumental in the company's transition towards a more sustainable energy future.",
     "ipoYear": 2022,
     "high52w": 412.23,
-    "low52w": 160.75
+    "low52w": 160.75,
+    "funFact1": "Originally formed as part of a larger utility, the company was spun off in 2000 as a separate entity focused on energy generation. Before its separation, it was a key component of a much larger conglomerate involved in various industries.",
+    "funFact2": "The company owns and operates several hydroelectric facilities, contributing to its diverse renewable energy portfolio, and has been actively investing in wind and solar projects to further expand its clean energy capabilities."
   },
   "difficulty": 4
 }

@@ -61325,10 +61325,12 @@
     "industry": "Internet Retail",
     "marketCapRange": "Mega Cap (>$200B)",
     "hqCountry": "United States",
-    "description": "The company",
+    "description": "This company is a global technology giant known for its vast e-commerce marketplace, cloud computing services (******), and digital advertising. Founded by Jeff Bezos, it has expanded into areas like streaming entertainment (****), artificial intelligence, and consumer electronics. Its scale and influence on retail and technology are unparalleled.",
     "ipoYear": 1997,
     "high52w": 258.6,
-    "low52w": 161.38
+    "low52w": 161.38,
+    "funFact1": "Initially, Jeff Bezos considered naming the company \"******\" but ultimately chose the name referencing the world\u2019s largest river system. The original website was launched in 1995 and primarily sold books.",
+    "funFact2": "The company\u2019s headquarters are located in Seattle, Washington, and it\u2019s one of the largest private employers in the United States, with over 1.5 million employees worldwide \u2013 a number that surpasses the population of many countries."
   },
-  "difficulty": 3
+  "difficulty": 1
 }

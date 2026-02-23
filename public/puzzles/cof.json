@@ -65770,10 +65770,12 @@
     "industry": "Credit Services",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This financial services company, led by CEO Richard Fairbank, is known for its credit cards and data-driven approach to banking. They offer a range of products including loans, auto financing, and deposit accounts, often targeting consumers and small businesses with rewards programs and digital tools. A significant portion of their revenue comes from partnerships and a focus on acquiring customers online, making them a notable player in the U.S. lending market, symbolized by ****.",
+    "description": "This financial services company offers a wide range of credit cards, banking products, and auto loans to consumers and businesses. They are known for their data-driven approach to marketing and risk management, leveraging analytics to personalize offers and improve customer experience. Richard Harrison founded the company in 1988 with a focus on direct mail credit card solicitations, a strategy that initially disrupted the industry.",
     "ipoYear": 1994,
     "high52w": 259.64,
-    "low52w": 141.84
+    "low52w": 141.84,
+    "funFact1": "Initially, the company\u2019s name was not what it is today; it was originally Ingley Associates, then Commercial Credit, before being rebranded to its current name. The name was chosen to evoke a sense of strength and reliability, combining \"capital\" and \"one.\"",
+    "funFact2": "The company has a significant presence in Canada, operating as ********, and has historically explored opportunities in the United Kingdom before divesting those operations. They are a major issuer of credit cards in both the US and Canada."
   },
   "difficulty": 3
 }

@@ -91740,10 +91740,12 @@
     "industry": "Household & Personal Products",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This consumer goods company, led by CEO Sean C. ***, has a long history dating back to 1847 and is known for its diverse portfolio of household, personal care, and specialty products. Their brands include ********, *****, and ********, catering to cleaning, nutrition, and pet care needs, respectively. The company is notable for its commitment to sustainability and its strong presence in both the US and international markets.",
+    "description": "This consumer goods company manufactures and markets a wide range of household, personal care, and specialty products. Their portfolio includes brands like Arm & Hammer baking soda, Trojan condoms, and Batist dry shampoo, catering to diverse needs from cleaning and hygiene to health and wellness. Founded in 1846, the company has a long history of innovation and adapting to changing consumer preferences.",
     "ipoYear": 1980,
     "high52w": 114.96,
-    "low52w": 80.8
+    "low52w": 80.8,
+    "funFact1": "Initially, the company, founded by Mark ***** and his associates, focused primarily on the production of lard, candles, and soap \u2013 hence the name, reflecting their early business.",
+    "funFact2": "*****\u2019s baking soda has been used in fire extinguishers since the late 1800s, demonstrating a surprising and early application of their product beyond household use."
   },
   "difficulty": 4
 }

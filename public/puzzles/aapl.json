@@ -90389,10 +90389,12 @@
     "industry": "Consumer Electronics",
     "marketCapRange": "Mega Cap (>$200B)",
     "hqCountry": "United States",
-    "description": "Founded by ***** ****, this technology giant designs, develops, and sells consumer electronics, computer software, and online services. Their products include a range of computers, wearables, and services like a digital music store and a suite of productivity applications. The company is known for its focus on innovative design and a loyal customer base, consistently ranking among the world’s most valuable companies with the ticker symbol ****.",
+    "description": "This technology giant designs, develops, and sells consumer electronics, computer software, and online services. Their product line includes computers, wearables, and a variety of services like cloud storage and digital content distribution. Founded by Steve Jobs, Steve Wozniak, and Ronald Wayne, the company is renowned for its innovative design and substantial impact on the global technology landscape.",
     "ipoYear": 1980,
     "high52w": 288.62,
-    "low52w": 168.63
+    "low52w": 168.63,
+    "funFact1": "Before becoming a tech behemoth, ***** initially sold blue boxes, which were devices that allowed users to make free long-distance phone calls \u2013 a venture that landed one of the founders in legal trouble.",
+    "funFact2": "The first ***** Macintosh computer was shipped in plain brown boxes, mimicking the packaging used by the United Parcel Service (UPS) to emphasize the idea of delivering a computer directly to consumers."
   },
   "difficulty": 3
 }

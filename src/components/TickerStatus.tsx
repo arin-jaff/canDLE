@@ -63,10 +63,23 @@ export function TickerStatus() {
 
   useEffect(() => { fetchPuzzles(); }, []);
 
+  const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
   const regenDescription = async (ticker: string) => {
     setRegenning((prev) => new Set(prev).add(ticker));
     try {
-      const res = await fetch(`/api/admin/regen-description?ticker=${encodeURIComponent(ticker)}`);
+      let res: Response;
+      if (isDev) {
+        // Dev server uses GET with query param
+        res = await fetch(`/api/admin/regen-description?ticker=${encodeURIComponent(ticker)}`);
+      } else {
+        // Production Cloudflare Function uses POST with JSON body
+        res = await fetch('/api/admin/regen-description', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ticker }),
+        });
+      }
       const text = await res.text();
       let data;
       try {
@@ -78,7 +91,16 @@ export function TickerStatus() {
       if (data.error) {
         alert(`Error: ${data.error}`);
       } else {
-        await fetchPuzzles();
+        // In production, update the local state immediately with returned data
+        if (!isDev && data.description) {
+          setPuzzles((prev) => prev.map((p) =>
+            p.ticker === ticker.toUpperCase()
+              ? { ...p, description: data.description, funFact1: data.funFact1 || '', funFact2: data.funFact2 || '', difficulty: data.difficulty ?? p.difficulty }
+              : p
+          ));
+        } else {
+          await fetchPuzzles();
+        }
       }
     } catch (e) {
       alert(`Failed: ${e}`);
@@ -118,13 +140,26 @@ export function TickerStatus() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ticker: editing, description: editText }),
       });
-      const data = await res.json();
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        alert(`Server returned invalid response: ${text.slice(0, 200)}`);
+        return;
+      }
       if (data.error) {
         alert(`Error: ${data.error}`);
       } else {
+        // Update local state immediately
+        const savedTicker = editing;
+        const savedText = editText;
         setEditing(null);
         setEditText('');
-        await fetchPuzzles();
+        setPuzzles((prev) => prev.map((p) =>
+          p.ticker === savedTicker ? { ...p, description: savedText } : p
+        ));
+        if (isDev) await fetchPuzzles();
       }
     } catch (e) {
       alert(`Failed: ${e}`);
@@ -144,12 +179,21 @@ export function TickerStatus() {
   return (
     <div className="border border-terminal-border">
       <div className="bg-terminal-dark px-3 py-2 border-b border-terminal-border">
-        <span className="text-[10px] text-terminal-yellow tracking-widest uppercase font-medium">
-          TICKER STATUS
-        </span>
-        <span className="text-[9px] text-terminal-muted ml-2">
-          {puzzles.length} PUZZLES
-        </span>
+        <div className="flex items-center justify-between">
+          <div>
+            <span className="text-[10px] text-terminal-yellow tracking-widest uppercase font-medium">
+              TICKER STATUS
+            </span>
+            <span className="text-[9px] text-terminal-muted ml-2">
+              {puzzles.length} PUZZLES
+            </span>
+          </div>
+          {!isDev && (
+            <span className="text-[8px] text-terminal-border tracking-wider">
+              CHANGES COMMIT TO GITHUB → AUTO REDEPLOY
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="max-h-[400px] overflow-y-auto">
