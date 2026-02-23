@@ -52484,12 +52484,12 @@
     "industry": "Entertainment",
     "marketCapRange": "Mega Cap (>$200B)",
     "hqCountry": "United States",
-    "description": "This company is a leading streaming entertainment service, offering a wide variety of TV shows, movies, documentaries, and animated programs to its members worldwide. It produces and acquires content, distributing it through its own platform and various devices. Reed Hastings and Marc Randolph co-founded the company, initially as a DVD rental service before transitioning to streaming.",
+    "description": "This company is a leading streaming entertainment service, offering a wide variety of TV shows, movies, documentaries, and animated programs to its members worldwide. It produces and acquires content, distributing it through its own platform and various devices. Founded by Reed Hastings and Marc Randolph, it revolutionized how people consume media and is known for its original programming like *******.",
     "ipoYear": 2002,
     "high52w": 134.12,
     "low52w": 79.23,
-    "funFact1": "Before becoming a streaming giant, the company famously mailed DVDs to subscribers in red envelopes, disrupting the traditional brick-and-mortar video rental market. The first DVD was mailed on April 14, 1998.",
-    "funFact2": "To test new content, the company sometimes releases episodes to a small group of viewers and analyzes their viewing habits and engagement before wider release, a practice known as \"breakout\" testing."
+    "funFact1": "Initially, the company started as a DVD rental service by mail in 1997, competing with Blockbuster, before transitioning to streaming in 2007.",
+    "funFact2": "The company once offered a subscription tier that allowed members to rent DVDs by mail alongside streaming access, a hybrid model discontinued in 2011."
   },
   "difficulty": 1
 }
