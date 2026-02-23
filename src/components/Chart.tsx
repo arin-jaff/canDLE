@@ -139,13 +139,13 @@ export function Chart({ data, showPriceAxis, basePrice }: ChartProps) {
       <div
         ref={containerRef}
         className="w-full border border-terminal-border"
-        style={{ height: '320px' }}
+        style={{ height: '400px' }}
       />
       {ohlcAvailable && (
         <div className="flex border border-terminal-border border-t-0 bg-terminal-dark">
           <button
             onClick={() => setMode('candle')}
-            className={`flex-1 py-1.5 text-[10px] uppercase tracking-wider transition-colors border-r border-terminal-border
+            className={`flex-1 py-2 text-xs uppercase tracking-wider transition-colors border-r border-terminal-border
               ${effectiveMode === 'candle'
                 ? 'text-terminal-green bg-terminal-green-dark/30'
                 : 'text-terminal-muted hover:text-terminal-text'
@@ -155,7 +155,7 @@ export function Chart({ data, showPriceAxis, basePrice }: ChartProps) {
           </button>
           <button
             onClick={() => setMode('line')}
-            className={`flex-1 py-1.5 text-[10px] uppercase tracking-wider transition-colors
+            className={`flex-1 py-2 text-xs uppercase tracking-wider transition-colors
               ${effectiveMode === 'line'
                 ? 'text-terminal-green bg-terminal-green-dark/30'
                 : 'text-terminal-muted hover:text-terminal-text'

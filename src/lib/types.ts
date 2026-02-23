@@ -19,6 +19,8 @@ export interface PuzzleData {
     marketCapRange: string;
     hqCountry: string;
     description: string;
+    funFact1?: string;
+    funFact2?: string;
     high52w: number;
     low52w: number;
     ipoYear: number;

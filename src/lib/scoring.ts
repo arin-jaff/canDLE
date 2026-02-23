@@ -10,7 +10,9 @@ export interface HintDef {
 
 export const HINT_DEFINITIONS: HintDef[] = [
   { id: 'hqCountry', label: 'HQ COUNTRY', cost: 25, type: 'text' },
+  { id: 'funFact1', label: 'FUN FACT 1', cost: 30, type: 'text' },
   { id: 'ipoYear', label: 'IPO YEAR', cost: 50, type: 'text' },
+  { id: 'funFact2', label: 'FUN FACT 2', cost: 60, type: 'text' },
   { id: 'sector', label: 'SECTOR', cost: 75, type: 'text' },
   { id: 'marketCapRange', label: 'MKT CAP', cost: 100, type: 'text' },
   { id: 'industry', label: 'INDUSTRY', cost: 125, type: 'text' },

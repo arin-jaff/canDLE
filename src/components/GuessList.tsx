@@ -17,7 +17,7 @@ export function GuessList({ guesses, correctTicker, won }: GuessListProps) {
           <div
             key={`${guess}-${i}`}
             className={`
-              flex items-center gap-3 px-3 py-1.5 text-xs font-mono
+              flex items-center gap-3 px-4 py-2.5 text-sm font-mono
               border-b border-terminal-border last:border-b-0
               ${isCorrect ? 'bg-fin-green/10' : ''}
             `}

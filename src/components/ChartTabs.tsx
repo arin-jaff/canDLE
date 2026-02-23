@@ -28,7 +28,7 @@ export function ChartTabs() {
             onClick={() => unlocked && setActiveChart(key)}
             disabled={!unlocked}
             className={`
-              flex-1 py-2 px-3 text-xs font-mono uppercase tracking-wider
+              flex-1 py-2.5 px-4 text-sm font-mono uppercase tracking-wider
               border-r border-terminal-border last:border-r-0
               transition-colors duration-100
               ${active

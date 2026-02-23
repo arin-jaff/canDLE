@@ -98,46 +98,24 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 def generate_description_gemini(
     ticker: str, name: str, sector: str, industry: str,
     country: str = "", ipo_year: int | None = None,
-) -> str | None:
-    """Use Gemini to generate a company description with giveaway words redacted as asterisks."""
+) -> dict | None:
+    """Use Gemini to generate a company description + 2 fun facts with giveaway words redacted.
+
+    Returns dict with keys: description, funFact1, funFact2 — or None on failure.
+    """
     if not GEMINI_API_KEY:
         print("  No GEMINI_API_KEY set, skipping AI description")
         return None
 
-    # --- OLD PROMPT (over-censored) ---
-    # prompt = f"""You are generating a hint for a stock guessing game called canDLE. Players see an anonymized stock chart and buy hints to guess the company ticker. Other facts about the company (sector, industry, country, IPO year, market cap) are sold as SEPARATE purchaseable hints in the game, so the description MUST NOT reveal any of those either.
-    #
-    # Generate a 2-3 sentence description of {name} (ticker: {ticker}).
-    #
-    # The description should give clues about what the company does or why it is notable, but with ALL giveaway words replaced by asterisks matching the EXACT character count of each replaced word.
-    #
-    # Words you MUST redact (replace each word with asterisks equal to its character count):
-    # - The company name or any part of it (e.g., "Apple" → "*****", "Microsoft" → "*********")
-    # - The ticker symbol (e.g., "TSLA" → "****")
-    # - Founder/CEO names (e.g., "Elon Musk" → "**** ****", "Jeff Bezos" → "**** *****")
-    # - Flagship product or service names that immediately identify the company (e.g., "iPhone" → "******", "Windows" → "*******")
-    # - Well-known brand names, subsidiaries, or acquisitions that are dead giveaways
-    # - The sector "{sector}" and industry "{industry}" or similar phrasing — sold as a separate hint
-    # - The headquarters country "{country}" and any headquarters city — sold as a separate hint
-    # - Any founding year, IPO year ({ipo_year or 'unknown'}), or other specific years — sold as a separate hint
-    # - Any specific stock price, 52-week high/low, or market cap figures — sold as separate hints
-    #
-    # Words you must NOT redact:
-    # - Generic descriptions of what the company does (e.g., "operates an online marketplace", "manufactures electric vehicles")
-    # - General business terms (revenue, market share, growth, users)
-    #
-    # IMPORTANT: Do NOT mention founding years, IPO years, headquarters location, sector, or industry even in redacted form. Simply omit those facts. Focus entirely on WHAT the company does and WHY it's notable.
-    #
-    # Return ONLY the final redacted description. No quotes, no explanation, no preamble.
-    #
-    # Example good output:
-    # This company operates the world's largest online social networking platform with over 3 billion monthly active users. Led by CEO **** **********, it also owns popular messaging and photo-sharing apps including ********* and ********. It has invested heavily in virtual reality and metaverse technologies."""
+    prompt = f"""You are generating hints for a stock guessing game called canDLE. Players see an anonymized stock chart and buy hints to guess the company ticker.
 
-    prompt = f"""You are generating a hint for a stock guessing game called canDLE. Players see an anonymized stock chart and buy hints to guess the company ticker.
+Generate the following for {name} (ticker: {ticker}):
 
-Generate a 2-3 sentence description of {name} (ticker: {ticker}).
+1. DESCRIPTION: A 2-3 sentence description of what the company does, its products, services, and why it is notable. Be specific and helpful.
 
-The description should be informative and give real clues about what the company does, its products, services, and why it is notable. Be specific and helpful — the player is paying in-game currency for this hint.
+2. FUN FACT 1: A surprising, interesting, or little-known fact about the company. Could be about its history, culture, records, quirky origins, etc.
+
+3. FUN FACT 2: Another different fun fact. Try to pick something from a different angle than fact 1.
 
 ONLY redact words that would IMMEDIATELY give away the answer. Replace each redacted word with asterisks matching its character count:
 - The company name or any part of it (e.g., "Apple" → "*****")
@@ -145,22 +123,24 @@ ONLY redact words that would IMMEDIATELY give away the answer. Replace each reda
 - Flagship product names that are uniquely associated with the company (e.g., "iPhone" → "******", "Windows" → "*******", "Big Mac" → "*** ***")
 
 Do NOT redact:
-- General descriptions of what the company does (e.g., "electric vehicles", "cloud computing", "social media")
+- General descriptions of what the company does
 - CEO/founder names — these are fair game as clues
 - Subsidiary or brand names that aren't dead giveaways
 - Industry terms, business metrics, or general facts
 
-Return ONLY the description. No quotes, no explanation, no preamble.
+Return EXACTLY in this format (3 lines, each starting with the label):
+DESCRIPTION: <your description here>
+FUN FACT 1: <your fun fact here>
+FUN FACT 2: <your fun fact here>
 
-Example good output:
-Founded by Mark Zuckerberg, this company operates the world's largest social networking platform with over 3 billion monthly active users. It also owns popular messaging and photo-sharing apps including ********* and ********. The company has invested heavily in virtual reality and metaverse technologies through its ******* *** division."""
+No quotes, no extra explanation."""
 
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemma-3-12b-it:generateContent?key={GEMINI_API_KEY}"
     payload = {
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
             "temperature": 0.7,
-            "maxOutputTokens": 300,
+            "maxOutputTokens": 500,
         },
     }
 
@@ -175,9 +155,36 @@ Founded by Mark Zuckerberg, this company operates the world's largest social net
             resp.raise_for_status()
             result = resp.json()
             text = result["candidates"][0]["content"]["parts"][0]["text"]
-            desc = text.strip().strip('"').strip()
-            print(f"  Gemini description: {desc[:80]}...")
-            return desc
+            text = text.strip().strip('"').strip()
+
+            # Parse the structured response
+            description = ""
+            fun_fact_1 = ""
+            fun_fact_2 = ""
+            for line in text.split("\n"):
+                line = line.strip()
+                if line.upper().startswith("DESCRIPTION:"):
+                    description = line[len("DESCRIPTION:"):].strip()
+                elif line.upper().startswith("FUN FACT 1:"):
+                    fun_fact_1 = line[len("FUN FACT 1:"):].strip()
+                elif line.upper().startswith("FUN FACT 2:"):
+                    fun_fact_2 = line[len("FUN FACT 2:"):].strip()
+
+            if not description:
+                # Fallback: treat the entire text as description
+                description = text
+
+            print(f"  Gemini description: {description[:80]}...")
+            if fun_fact_1:
+                print(f"  Fun fact 1: {fun_fact_1[:60]}...")
+            if fun_fact_2:
+                print(f"  Fun fact 2: {fun_fact_2[:60]}...")
+
+            return {
+                "description": description,
+                "funFact1": fun_fact_1 or "This company has an interesting history in its industry.",
+                "funFact2": fun_fact_2 or "The company has made significant contributions to its sector.",
+            }
         except Exception as e:
             print(f"  Gemini API error: {e}")
             if attempt < 2:
@@ -342,13 +349,17 @@ def generate_from_ticker(ticker: str) -> dict:
     except Exception:
         pass
 
-    # Try Gemini for a smart redacted description (pass all hint fields so it knows what to omit)
-    description = generate_description_gemini(
+    # Try Gemini for a smart redacted description + fun facts
+    gemini_result = generate_description_gemini(
         ticker, name, sector, industry, country, ipo_year
     )
 
-    # Fallback: basic description from yfinance
-    if not description:
+    if gemini_result:
+        description = gemini_result["description"]
+        fun_fact_1 = gemini_result["funFact1"]
+        fun_fact_2 = gemini_result["funFact2"]
+    else:
+        # Fallback: basic description from yfinance
         raw = info.get("longBusinessSummary", "")
         if raw:
             sentences = raw.split(". ")
@@ -356,7 +367,9 @@ def generate_from_ticker(ticker: str) -> dict:
             description = description.replace(name, "The company")
             description = description.replace(ticker, "[TICKER]")
         else:
-            description = f"A publicly traded company."
+            description = "A publicly traded company."
+        fun_fact_1 = ""
+        fun_fact_2 = ""
 
     # Get difficulty rating from Gemini
     difficulty = generate_difficulty_gemini(ticker, name, sector, industry)
@@ -371,6 +384,8 @@ def generate_from_ticker(ticker: str) -> dict:
             "marketCapRange": market_cap_range,
             "hqCountry": country,
             "description": description,
+            "funFact1": fun_fact_1,
+            "funFact2": fun_fact_2,
             "ipoYear": ipo_year or 2000,
         },
     }

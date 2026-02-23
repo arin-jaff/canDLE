@@ -37,10 +37,14 @@ def regen(ticker: str):
 
     print(f"Regenerating description for {ticker_upper} ({name})...")
 
-    new_desc = generate_description_gemini(ticker_upper, name, sector, industry, country, ipo_year)
-    if new_desc:
-        puzzle["hints"]["description"] = new_desc
-        print(f"  New description: {new_desc[:80]}...")
+    gemini_result = generate_description_gemini(ticker_upper, name, sector, industry, country, ipo_year)
+    if gemini_result:
+        puzzle["hints"]["description"] = gemini_result["description"]
+        puzzle["hints"]["funFact1"] = gemini_result["funFact1"]
+        puzzle["hints"]["funFact2"] = gemini_result["funFact2"]
+        print(f"  New description: {gemini_result['description'][:80]}...")
+        print(f"  Fun fact 1: {gemini_result['funFact1'][:60]}...")
+        print(f"  Fun fact 2: {gemini_result['funFact2'][:60]}...")
     else:
         print("  Description generation failed, keeping existing.")
 

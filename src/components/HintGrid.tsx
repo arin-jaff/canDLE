@@ -15,7 +15,7 @@ const CATEGORIES: { key: string; label: string; ids: string[] }[] = [
   { key: 'all', label: 'ALL', ids: [] },
   { key: 'technical', label: 'TECHNICAL', ids: ['5y', '10y', 'high52w'] },
   { key: 'fundamental', label: 'FUNDAMENTAL', ids: ['sector', 'industry', 'marketCapRange', 'ipoYear'] },
-  { key: 'company', label: 'COMPANY', ids: ['hqCountry', 'description'] },
+  { key: 'company', label: 'COMPANY', ids: ['hqCountry', 'description', 'funFact1', 'funFact2'] },
 ];
 
 export function HintGrid({ puzzle, revealedHints, bankroll, disabled, onBuyHint }: HintGridProps) {
@@ -37,7 +37,7 @@ export function HintGrid({ puzzle, revealedHints, bankroll, disabled, onBuyHint 
             key={cat.key}
             onClick={() => setActiveTab(cat.key)}
             className={`
-              px-4 py-2 text-[10px] uppercase tracking-wider transition-colors
+              px-4 py-2.5 text-xs uppercase tracking-wider transition-colors
               ${activeTab === cat.key
                 ? 'text-terminal-green border-b-2 border-terminal-green bg-terminal-green-dark/30'
                 : 'text-terminal-muted hover:text-terminal-text'
@@ -52,9 +52,9 @@ export function HintGrid({ puzzle, revealedHints, bankroll, disabled, onBuyHint 
       {/* Data table */}
       <div className="border border-terminal-border border-t-0">
         {/* Table header */}
-        <div className="flex items-center px-3 py-1.5 bg-terminal-dark border-b border-terminal-border">
-          <span className="flex-1 text-[9px] text-terminal-muted uppercase tracking-widest">Metric</span>
-          <span className="w-20 text-right text-[9px] text-terminal-muted uppercase tracking-widest">Cost</span>
+        <div className="flex items-center px-4 py-2 bg-terminal-dark border-b border-terminal-border">
+          <span className="flex-1 text-[10px] text-terminal-muted uppercase tracking-widest">Metric</span>
+          <span className="w-20 text-right text-[10px] text-terminal-muted uppercase tracking-widest">Cost</span>
         </div>
 
         {/* Rows */}

@@ -133,16 +133,16 @@ function App() {
             <div>
               <div className="flex items-center justify-between mb-2 px-1">
                 <div className="flex items-center gap-2">
-                  <div className="w-1 h-3 bg-terminal-green rounded-sm" />
-                  <span className="text-[11px] text-terminal-muted tracking-widest uppercase font-medium">
+                  <div className="w-1 h-4 bg-terminal-green rounded-sm" />
+                  <span className="text-xs text-terminal-muted tracking-widest uppercase font-medium">
                     PRICE CHART
                   </span>
-                  <span className="text-[10px] text-terminal-border">
+                  <span className="text-[11px] text-terminal-border">
                     {state.activeChart.toUpperCase()}
                   </span>
                 </div>
                 {showPriceAxis && (
-                  <span className="text-[10px] text-terminal-green tracking-widest font-mono">
+                  <span className="text-[11px] text-terminal-green tracking-widest font-mono">
                     $ AXIS
                   </span>
                 )}
@@ -181,16 +181,16 @@ function App() {
           </div>
 
           {/* Right Panel — Hints + Guess */}
-          <div className="lg:w-[420px] xl:w-[480px] p-4 lg:p-5 space-y-3 lg:overflow-y-auto border-t lg:border-t-0 border-terminal-border">
+          <div className="lg:w-[440px] xl:w-[500px] p-4 lg:p-5 space-y-4 lg:overflow-y-auto border-t lg:border-t-0 border-terminal-border">
             <div>
               <div className="flex items-center justify-between mb-2 px-1">
                 <div className="flex items-center gap-2">
-                  <div className="w-1 h-3 bg-terminal-muted rounded-sm" />
-                  <span className="text-[11px] text-terminal-muted tracking-widest uppercase font-medium">
+                  <div className="w-1 h-4 bg-terminal-muted rounded-sm" />
+                  <span className="text-xs text-terminal-muted tracking-widest uppercase font-medium">
                     DATA & ANALYTICS
                   </span>
                 </div>
-                <span className="text-[8px] text-terminal-border tracking-wider">
+                <span className="text-[10px] text-terminal-border tracking-wider">
                   CLICK TO REVEAL
                 </span>
               </div>
@@ -205,8 +205,8 @@ function App() {
 
             <div>
               <div className="flex items-center gap-2 mb-2 px-1">
-                <div className="w-1 h-3 bg-terminal-muted rounded-sm" />
-                <span className="text-[11px] text-terminal-muted tracking-widest uppercase font-medium">
+                <div className="w-1 h-4 bg-terminal-muted rounded-sm" />
+                <span className="text-xs text-terminal-muted tracking-widest uppercase font-medium">
                   SUBMIT GUESS
                 </span>
               </div>

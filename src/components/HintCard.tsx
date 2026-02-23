@@ -17,6 +17,8 @@ function formatHintValue(hint: HintDef, puzzle: PuzzleData): string {
     case 'marketCapRange': return h.marketCapRange;
     case 'hqCountry': return h.hqCountry;
     case 'description': return h.description;
+    case 'funFact1': return h.funFact1 || 'No fun fact available';
+    case 'funFact2': return h.funFact2 || 'No fun fact available';
     case 'high52w': return `H: $${h.high52w.toFixed(2)} / L: $${h.low52w.toFixed(2)}`;
     case 'industry': return h.industry;
     case 'ipoYear': return String(h.ipoYear);
@@ -31,6 +33,8 @@ function formatHintValue(hint: HintDef, puzzle: PuzzleData): string {
 function getHintDescription(id: string): string {
   switch (id) {
     case 'hqCountry': return 'Country where the company is headquartered';
+    case 'funFact1': return 'A surprising or little-known fact about the company';
+    case 'funFact2': return 'Another interesting fact from a different angle';
     case 'ipoYear': return 'Year the stock first went public';
     case 'sector': return 'Broad market sector (e.g. Technology, Healthcare)';
     case 'marketCapRange': return 'Market capitalization size range';
@@ -49,11 +53,11 @@ export function HintCard({ hint, revealed, puzzle, bankroll, disabled, onBuy }: 
 
   if (revealed) {
     return (
-      <div className="hint-reveal flex items-start gap-3 px-3 py-2.5 border-b border-terminal-border last:border-b-0 bg-terminal-green-dark/20">
-        <span className="text-[10px] text-terminal-muted uppercase tracking-wider w-24 shrink-0 pt-0.5">
+      <div className="hint-reveal flex items-start gap-3 px-4 py-3 border-b border-terminal-border last:border-b-0 bg-terminal-green-dark/20">
+        <span className="text-xs text-terminal-muted uppercase tracking-wider w-28 shrink-0 pt-0.5">
           {hint.label}
         </span>
-        <span className="flex-1 text-xs font-mono text-terminal-green leading-snug">
+        <span className="flex-1 text-sm font-mono text-terminal-green leading-snug">
           {formatHintValue(hint, puzzle)}
         </span>
       </div>
@@ -65,7 +69,7 @@ export function HintCard({ hint, revealed, puzzle, bankroll, disabled, onBuy }: 
       onClick={() => onBuy(hint.id)}
       disabled={disabled || !canAfford}
       className={`
-        w-full flex items-center gap-3 px-3 py-2.5
+        w-full flex items-center gap-3 px-4 py-3
         border-b border-terminal-border last:border-b-0
         transition-colors duration-100 text-left
         ${disabled
@@ -78,18 +82,18 @@ export function HintCard({ hint, revealed, puzzle, bankroll, disabled, onBuy }: 
     >
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-terminal-muted uppercase tracking-wider w-24 shrink-0">
+          <span className="text-xs text-terminal-muted uppercase tracking-wider w-28 shrink-0">
             {hint.label}
           </span>
-          <span className="flex-1 text-xs text-terminal-border font-mono">
+          <span className="flex-1 text-sm text-terminal-border font-mono">
             {'\u2500'.repeat(6)}
           </span>
         </div>
         {desc && (
-          <div className="text-[9px] text-terminal-border mt-0.5 pl-[104px]">{desc}</div>
+          <div className="text-[10px] text-terminal-border mt-0.5 pl-[120px]">{desc}</div>
         )}
       </div>
-      <span className="text-[11px] text-terminal-red font-mono w-16 text-right shrink-0">
+      <span className="text-xs text-terminal-red font-mono w-16 text-right shrink-0">
         -{hint.cost}
       </span>
     </button>

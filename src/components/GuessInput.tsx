@@ -74,7 +74,7 @@ export function GuessInput({ onSubmit, disabled, previousGuesses }: GuessInputPr
           disabled={disabled}
           placeholder={disabled ? 'GAME OVER' : 'Search ticker or company...'}
           className={`
-            flex-1 bg-transparent text-terminal-text text-sm px-3 py-2.5
+            flex-1 bg-transparent text-terminal-text text-base px-4 py-3
             font-mono placeholder:text-terminal-border
             outline-none
             ${disabled ? 'opacity-40 cursor-not-allowed' : ''}
@@ -84,7 +84,7 @@ export function GuessInput({ onSubmit, disabled, previousGuesses }: GuessInputPr
           onClick={() => handleSubmit()}
           disabled={disabled || filtered.length === 0}
           className={`
-            px-5 py-2.5 text-xs font-semibold uppercase tracking-wider
+            px-6 py-3 text-sm font-semibold uppercase tracking-wider
             border-l border-terminal-border
             transition-colors duration-100
             ${disabled || filtered.length === 0
@@ -110,7 +110,7 @@ export function GuessInput({ onSubmit, disabled, previousGuesses }: GuessInputPr
                 handleSubmit(t.ticker);
               }}
               className={`
-                w-full text-left px-3 py-2 text-xs font-mono flex items-center gap-3
+                w-full text-left px-4 py-2.5 text-sm font-mono flex items-center gap-3
                 border-b border-terminal-border last:border-b-0
                 ${i === selectedIndex
                   ? 'bg-terminal-green-dark text-terminal-green'

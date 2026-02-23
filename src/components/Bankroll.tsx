@@ -9,11 +9,11 @@ export function Bankroll({ bankroll }: BankrollProps) {
   const isLow = pct < 30;
 
   return (
-    <div className="flex items-center gap-3 px-3 py-2 border border-terminal-border bg-terminal-dark">
-      <span className="text-[10px] text-terminal-muted uppercase tracking-widest shrink-0">
+    <div className="flex items-center gap-3 px-4 py-3 border border-terminal-border bg-terminal-dark">
+      <span className="text-xs text-terminal-muted uppercase tracking-widest shrink-0">
         CAPITAL
       </span>
-      <div className="flex-1 h-1.5 bg-terminal-black rounded-sm overflow-hidden">
+      <div className="flex-1 h-2 bg-terminal-black rounded-sm overflow-hidden">
         <div
           className={`h-full transition-all duration-300 rounded-sm ${isLow ? 'bg-terminal-red' : 'bg-terminal-green'}`}
           style={{ width: `${pct}%` }}
