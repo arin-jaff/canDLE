@@ -90389,12 +90389,12 @@
     "industry": "Consumer Electronics",
     "marketCapRange": "Mega Cap (>$200B)",
     "hqCountry": "United States",
-    "description": "This technology giant designs, develops, and sells consumer electronics, computer software, and online services. Their product line includes computers, wearables, and a variety of services like cloud storage and digital content distribution. Founded by Steve Jobs, Steve Wozniak, and Ronald Wayne, the company is renowned for its innovative design and substantial impact on the global technology landscape.",
+    "description": "This technology giant designs, develops, and sells consumer electronics, computer software, and online services. Their product line includes computers, wearables, and a variety of services like cloud storage and digital content distribution. Founded by Steve Jobs, Steve Wozniak, and Ronald Wayne, the company is renowned for its innovative design and marketing strategies.",
     "ipoYear": 1980,
     "high52w": 288.62,
     "low52w": 168.63,
-    "funFact1": "Before becoming a tech behemoth, ***** initially sold blue boxes, which were devices that allowed users to make free long-distance phone calls \u2013 a venture that landed one of the founders in legal trouble.",
-    "funFact2": "The first ***** Macintosh computer was shipped in plain brown boxes, mimicking the packaging used by the United Parcel Service (UPS) to emphasize the idea of delivering a computer directly to consumers."
+    "funFact1": "Before becoming a tech behemoth, the company was initially focused on building and selling handcrafted computers for hobbyists, and even briefly explored the idea of producing pinball machines.",
+    "funFact2": "The first version of the Macintosh operating system, released in 1984, was largely developed by a small team of employees working in a secret location nicknamed \"The Garage\" – a far cry from their current sprawling campuses."
   },
-  "difficulty": 3
+  "difficulty": 1
 }
