@@ -91740,10 +91740,12 @@
     "industry": "Specialty Industrial Machinery",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This global manufacturer, led by CEO Jos\u00e9 Almeida, specializes in motion and control technologies and solutions. They provide a wide range of products including hydraulic, pneumatic, and electromechanical systems used in industries like aerospace, industrial equipment, and mobile hydraulics. Their diverse portfolio and focus on engineered solutions makes them a key supplier to numerous sectors requiring precision and reliability.",
+    "description": "This company engineers motion and controls systems for a wide range of industries, including aerospace, automotive, climate control, and industrial manufacturing. They produce hydraulic, pneumatic, and electromechanical solutions, as well as filtration and sealing systems. Founded by T. Edward *** in 1963, the company is notable for its global presence and focus on technological innovation.",
     "ipoYear": 1980,
     "high52w": 1012.49,
-    "low52w": 483.97
+    "low52w": 483.97,
+    "funFact1": "The company's name combines the surnames of its founders: T. Edward *** and Forrest E. ***.",
+    "funFact2": "In 2018, the company acquired ***, a leading manufacturer of fluid and gas handling equipment, significantly expanding its capabilities in the life sciences and chemical processing markets."
   },
-  "difficulty": 4
+  "difficulty": 3
 }

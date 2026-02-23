@@ -42,9 +42,14 @@ export async function commitFile(
   message: string,
   token: string,
 ): Promise<boolean> {
-  // Encode content to base64 via ArrayBuffer (handles UTF-8)
+  // Encode content to base64 in chunks (avoids stack overflow on large files)
   const encoded = new TextEncoder().encode(content);
-  const binStr = Array.from(encoded, (b) => String.fromCharCode(b)).join('');
+  let binStr = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < encoded.length; i += chunkSize) {
+    const chunk = encoded.subarray(i, i + chunkSize);
+    binStr += String.fromCharCode(...chunk);
+  }
   const b64 = btoa(binStr);
 
   const res = await fetch(`${API}/repos/${repo}/contents/${path}`, {
