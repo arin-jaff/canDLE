@@ -65770,12 +65770,12 @@
     "industry": "Credit Services",
     "marketCapRange": "Large Cap ($10B-$200B)",
     "hqCountry": "United States",
-    "description": "This financial services company offers a wide range of credit cards, banking products, and auto loans to consumers and businesses. They are known for their data-driven approach to marketing and risk management, leveraging analytics to personalize offers and improve customer experience. Richard Harrison founded the company in 1988 with a focus on direct mail credit card solicitations, a strategy that initially disrupted the industry.",
+    "description": "This financial services company offers a wide range of credit cards, banking products, and auto loans to consumers and businesses. They are known for their data-driven approach to marketing and risk management, leveraging analytics to personalize offers and improve customer experiences. Richard Harrison founded the company in 1988 with a focus on direct mail credit card solicitations, a strategy that initially disrupted the industry.",
     "ipoYear": 1994,
     "high52w": 259.64,
     "low52w": 141.84,
-    "funFact1": "Initially, the company’s name was Innovation Credit Card, Inc., but Harrison quickly rebranded it to reflect his vision of being a leader in the financial sector, drawing inspiration from a visit to a ***** in London.",
-    "funFact2": "In 2019, the company acquired *****, a fintech startup specializing in automated expense reporting, demonstrating their commitment to incorporating technology and streamlining business processes."
+    "funFact1": "Initially, the company’s name was Innovation Credit Card, but Harrison quickly rebranded it to reflect his desire to be the \"first choice\" for customers, aiming for a name that sounded like \"capital one.\"",
+    "funFact2": "The company has a significant presence in the digital space, investing heavily in mobile banking and online platforms, and was an early adopter of cloud computing, migrating a substantial portion of its infrastructure to Amazon Web Services."
   },
   "difficulty": 3
 }
