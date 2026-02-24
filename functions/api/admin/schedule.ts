@@ -13,7 +13,13 @@ interface RequestContext {
 
 export const onRequestPost = async ({ request, env }: RequestContext) => {
   try {
-    const newSchedule = await request.json() as Record<string, string>;
+    const bodyText = await request.text();
+    let newSchedule: Record<string, string>;
+    try {
+      newSchedule = JSON.parse(bodyText);
+    } catch {
+      return Response.json({ error: `Invalid JSON body: ${bodyText.slice(0, 100)}` }, { status: 400 });
+    }
 
     if (!newSchedule || typeof newSchedule !== 'object') {
       return Response.json({ error: 'Invalid schedule data' }, { status: 400 });

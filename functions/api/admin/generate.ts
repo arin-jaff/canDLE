@@ -12,7 +12,16 @@ interface RequestContext {
 
 export const onRequestPost = async ({ request, env }: RequestContext) => {
   try {
-    const { ticker } = await request.json() as { ticker: string };
+    // Parse body robustly
+    const bodyText = await request.text();
+    let ticker: string;
+    try {
+      const parsed = JSON.parse(bodyText);
+      ticker = parsed.ticker;
+    } catch {
+      return Response.json({ error: `Invalid JSON body: ${bodyText.slice(0, 100)}` }, { status: 400 });
+    }
+
     if (!ticker) {
       return Response.json({ error: 'Missing ticker' }, { status: 400 });
     }

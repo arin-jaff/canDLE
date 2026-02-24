@@ -14,7 +14,13 @@ interface RequestContext {
 
 export const onRequestPost = async ({ request, env }: RequestContext) => {
   try {
-    const { ticker } = await request.json() as { ticker: string };
+    const bodyText = await request.text();
+    let ticker: string;
+    try {
+      ticker = JSON.parse(bodyText).ticker;
+    } catch {
+      return Response.json({ error: `Invalid JSON body: ${bodyText.slice(0, 100)}` }, { status: 400 });
+    }
     if (!ticker) {
       return Response.json({ error: 'Missing ticker' }, { status: 400 });
     }
